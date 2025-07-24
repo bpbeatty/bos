@@ -19,6 +19,10 @@ dnf5 install -y tmux
 # Disable COPRs so they don't end up enabled on the final image:
 # dnf5 -y copr disable ublue-os/staging
 
+echo "::group:: ===Branding Changes==="
+/ctx/branding.sh
+echo "::endgroup::"
+
 echo "::group:: ===Container Signing==="
 /ctx/signing.sh
 echo "::endgroup::"
