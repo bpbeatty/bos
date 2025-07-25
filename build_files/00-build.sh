@@ -10,7 +10,10 @@ set -ouex pipefail
 # https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
 
 # this installs a package from fedora repos
-dnf5 install -y tmux 
+dnf5 install -y clevis clevis-dracut clevis-udisks2 firefox firefox-langpacks vim gqrx
+dnf5 remove -y bluefin-backgrounds bluefin-cli-logos bluefin-faces bluefin-fastfetch bluefin-schemas gnome-shell-extension-tailscale-gnome-qs tailscale ublue-bling ublue-brew ublue-fastfetch ublue-motd
+dnf5 swap -y nano-default-editor vim-default-editor
+
 
 # Use a COPR Example:
 #
@@ -20,7 +23,11 @@ dnf5 install -y tmux
 # dnf5 -y copr disable ublue-os/staging
 
 echo "::group:: ===Branding Changes==="
-/ctx/branding.sh
+/ctx/01-branding.sh
+echo "::endgroup::"
+
+echo "::group:: ===Base Image Changes==="
+/ctx/07-base-image-changes.sh
 echo "::endgroup::"
 
 echo "::group:: ===Container Signing==="
