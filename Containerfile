@@ -1,9 +1,9 @@
 ARG BASE_IMAGE="bluefin"
 ARG TAG_VERSION="gts"
 ARG IMAGE="bluefin"
-ARG SET_X="x"
+ARG SET_X=""
 ARG VERSION="gts"
-ARG DNF="dnf5"
+ARG DNF=""
 
 # Allow build scripts to be referenced without being copied into the final image
 FROM scratch AS ctx
@@ -18,12 +18,8 @@ FROM ghcr.io/ublue-os/${BASE_IMAGE}:${TAG_VERSION} as base
 ARG BASE_IMAGE="bluefin"
 ARG IMAGE="bluefin"
 ARG SET_X=""
-ARG VERSION=""
+ARG VERSION="gts"
 ARG DNF="dnf5"
-
-### MODIFICATIONS
-## make modifications desired in your image and install packages by modifying the build.sh script
-## the following RUN directive does all the things required to run "build.sh" as recommended.
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
