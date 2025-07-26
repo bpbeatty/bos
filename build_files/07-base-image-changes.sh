@@ -4,7 +4,8 @@ echo "::group:: ===$(basename "$0")==="
 
 set -ouex pipefail
 
-rsync -rvK /ctx/ /
+rsync -rvK /ctx/etc /
+rsync -rvK /ctx/usr /
 
 # Test bluefin gschema override for errors. If there are no errors, proceed with compiling bluefin gschema, which includes setting overrides.
 mkdir -p /tmp/bluefin-schema-test
