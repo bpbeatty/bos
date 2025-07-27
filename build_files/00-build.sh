@@ -8,7 +8,6 @@ ${DNF} remove -y \
   bluefin-cli-logos \
   bluefin-faces \
   bluefin-fastfetch \
-  bluefin-logos \
   bluefin-schemas \
   gnome-shell-extension-tailscale-gnome-qs \
   tailscale \
@@ -17,6 +16,7 @@ ${DNF} remove -y \
   ublue-fastfetch \
   ublue-motd \
   ublue-os-signing
+  # bluefin-logos \
   # bluefin-plymouth \
 
 # install
