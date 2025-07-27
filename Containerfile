@@ -5,12 +5,12 @@ ARG SET_X=""
 ARG VERSION="gts"
 ARG DNF=""
 
+FROM ghcr.io/bpbeatty/config:latest as config
 # Allow build scripts to be referenced without being copied into the final image
 FROM scratch AS ctx
 COPY build_files /
 COPY system_files /
 COPY cosign.pub /
-COPY --from=ghcr.io/bpbeatty/config:latest /rpms /tmp/rpms
 
 # Base Image
 FROM ghcr.io/ublue-os/${BASE_IMAGE}:${TAG_VERSION} as base
@@ -21,7 +21,8 @@ ARG SET_X=""
 ARG VERSION="gts"
 ARG DNF="dnf5"
 
-RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+RUN --mount=type=bind,from=ctx,src=/,target=/ctx \
+    --mount=type=bind,from=config,src=/rpms,dst=/tmp/rpms/config \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
