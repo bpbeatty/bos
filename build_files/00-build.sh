@@ -28,6 +28,9 @@ ${DNF} install -y /tmp/rpms/config/bpbeatty-signing*.rpm
 # swap
 ${DNF} swap -y nano-default-editor vim-default-editor
 
+dnf -y remove bluefin-plymouth
+dnf -y swap bluefin-logos fedora-logos
+
 echo "::group:: ===Remove CLI Wrap==="
 /ctx/01-remove-cliwrap.sh
 echo "::endgroup::"

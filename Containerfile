@@ -1,9 +1,6 @@
 ARG BASE_IMAGE="bluefin"
-ARG TAG_VERSION="gts"
 ARG IMAGE="bluefin"
-ARG SET_X=""
-ARG VERSION="gts"
-ARG DNF=""
+ARG TAG_VERSION="gts"
 
 FROM ghcr.io/bpbeatty/config:latest as config
 # Allow build scripts to be referenced without being copied into the final image
@@ -18,7 +15,7 @@ FROM ghcr.io/ublue-os/${BASE_IMAGE}:${TAG_VERSION} as base
 ARG BASE_IMAGE="bluefin"
 ARG IMAGE="bluefin"
 ARG SET_X=""
-ARG VERSION="gts"
+ARG VERSION=""
 ARG DNF="dnf5"
 
 RUN --mount=type=bind,from=ctx,src=/,target=/ctx \
