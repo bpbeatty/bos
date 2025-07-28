@@ -52,6 +52,6 @@ fi
 sed -i "s|^PRETTY_NAME=.*|PRETTY_NAME=\"$(echo "${IMAGE^}" | cut -d - -f1) (Version: ${VERSION} / FROM ${BASE_IMAGE^} $(rpm -E %fedora))\"|" /usr/lib/os-release
 sed -i "s|^VERSION=.*|VERSION=\"${VERSION} (${base_image^})\"|" /usr/lib/os-release
 sed -i "s|^OSTREE_VERSION=.*|OSTREE_VERSION=\'${VERSION}\'|" /usr/lib/os-release
-echo "IMAGE_ID=\"${IMAGE}\"" >>/usr/lib/os-release
-echo "IMAGE_VERSION=\"${VERSION}\"" >>/usr/lib/os-release
+# echo "IMAGE_ID=\"${IMAGE}\"" >>/usr/lib/os-release
+# echo "IMAGE_VERSION=\"${VERSION}\"" >>/usr/lib/os-release
 

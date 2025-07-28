@@ -1,5 +1,7 @@
 #!/usr/bin/bash -x
 
+set ${SET_X:+-x} -eou pipefail
+
 if [[ ! -d /usr/libexec/rpm-ostree/wrapped ]]; then
     echo "cliwrap is not setup, skipping..."
     exit 0

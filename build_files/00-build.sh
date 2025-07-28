@@ -1,6 +1,10 @@
 #!/bin/bash
 
-set -ouex pipefail
+set ${SET_X:+-x} -eou pipefail
+
+echo "::group:: ===Branding Changes==="
+/ctx/02-branding.sh
+echo "::endgroup::"
 
 # remove
 ${DNF} remove -y \
@@ -37,6 +41,10 @@ echo "::endgroup::"
 
 echo "::group:: ===Branding Changes==="
 /ctx/02-branding.sh
+echo "::endgroup::"
+
+echo "::group:: ===Fetch Quadlets==="
+/ctx/06-fetch-quadlets.sh
 echo "::endgroup::"
 
 echo "::group:: ===Base Image Changes==="
