@@ -12,8 +12,6 @@ ${DNF} remove -y \
   bluefin-cli-logos \
   bluefin-faces \
   bluefin-fastfetch \
-  bluefin-logos \
-  bluefin-plymouth \
   bluefin-schemas \
   gnome-shell-extension-tailscale-gnome-qs \
   tailscale \
@@ -22,15 +20,20 @@ ${DNF} remove -y \
   ublue-fastfetch \
   ublue-motd \
   ublue-os-signing
+  # bluefin-logos \
+  # bluefin-plymouth \
 
 # install
 ${DNF} install -y clevis clevis-dracut clevis-udisks2 firefox firefox-langpacks \
-  vim gqrx fedora-logos
+  vim gqrx # fedora-logos
 
 ${DNF} install -y /tmp/rpms/config/bpbeatty-signing*.rpm
 
 # swap
 ${DNF} swap -y nano-default-editor vim-default-editor
+
+dnf -y remove bluefin-plymouth
+dnf -y swap bluefin-logos fedora-logos
 
 echo "::group:: ===Remove CLI Wrap==="
 /ctx/01-remove-cliwrap.sh
