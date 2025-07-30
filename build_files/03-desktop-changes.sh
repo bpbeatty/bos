@@ -16,11 +16,12 @@ if [[ ${IMAGE} =~ bluefin|bazzite ]]; then
         ln -s /var/usrlocal /usr/local
     fi
 
-    # custom gnome overrides
-    mkdir -p /tmp/ublue-schema-test &&
-        find /usr/share/glib-2.0/schemas/ -type f ! -name "*.gschema.override" -exec cp {} /tmp/ublue-schema-test/ \; &&
+    # Test bluefin gschema override for errors. If there are no errors, proceed with compiling bluefin gschema, which includes setting overrides.
+    mkdir -p /tmp/bluefin-schema-test &&
+        find /usr/share/glib-2.0/schemas/ -ls -type f ! -name "*.gschema.override" -exec cp {} /tmp/bluefin-schema-test/ \; &&
         echo "Running error test for bos gschema override. Aborting if failed." &&
-        glib-compile-schemas --strict /tmp/ublue-schema-test || exit 1 &&
+        # We should ideally refactor this to handle multiple GNOME version schemas better
+        glib-compile-schemas --strict /tmp/bluefin-schema-test || exit 1 &&
         echo "Compiling gschema to include bos setting overrides" &&
         glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null
 fi
