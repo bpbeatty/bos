@@ -2,9 +2,11 @@
 
 set ${SET_X:+-x} -eou pipefail
 
-echo "::group:: ===Branding Changes==="
-/ctx/02-branding.sh
-echo "::endgroup::"
+echo "::group:: ===$(basename "$0")==="
+
+# copy system files
+rsync -rvK /ctx/etc /
+rsync -rvK /ctx/usr /
 
 # remove
 ${DNF} remove -y \
@@ -41,6 +43,10 @@ echo "::endgroup::"
 
 echo "::group:: ===Branding Changes==="
 /ctx/02-branding.sh
+echo "::endgroup::"
+
+echo "::group:: ===Desktop Changes==="
+/ctx/03-desktop-changes.sh
 echo "::endgroup::"
 
 echo "::group:: ===Fetch Quadlets==="
