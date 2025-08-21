@@ -25,7 +25,7 @@ runs:
           images+=("bazzite" "bazzite-nvidia")
           #images+=("bazzite-deck" "bazzite-deck-nvidia")
           ;;
-        "Bluefin")
+        "Desktop")
           images+=("bluefin" "bluefin-nvidia")
           images+=("bluefin-dx" "bluefin-dx-nvidia")
           images+=("bluefin-gdx" "bluefin-lts")

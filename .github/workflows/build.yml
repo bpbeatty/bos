@@ -31,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_flavor: ["Desktop", "Bazzite", "Server"]
+        image_flavor: ["Desktop"]
     with:
       image_flavor: ${{ matrix.image_flavor }}
 
