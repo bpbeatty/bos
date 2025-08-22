@@ -14,16 +14,11 @@ FQ_IMAGE_NAME := IMAGE_REGISTRY / repo_image_name
 [private]
 images := '(
 
-    # Stable Images
-    [aurora]=' + aurora + '
-    [aurora-nvidia]=' + aurora_nvidia + '
-    [bazzite]=' + bazzite + '
-    [bazzite-deck]=' + bazzite_deck + '
+    # Stable Images / GTS
     [bluefin]=' + bluefin + '
     [bluefin-dx]=' + bluefin_dx + '
     [bluefin-nvidia]=' + bluefin_nvidia + '
-    [cosmic]="cosmic"
-    [cosmic-nvidia]="cosmic-nvidia-open"
+    [bluefin-dx-nvidia]=' + bluefin_dx_nvidia + '
     [ucore]=' + ucore + '
     [ucore-nvidia]=' + ucore_nvidia + '
 
@@ -54,19 +49,13 @@ syft-installer := "ghcr.io/anchore/syft:v1.31.0@sha256:c15fa8af4c25edd72c0daf026
 # Base Containers
 
 [private]
-aurora := "ghcr.io/ublue-os/aurora:stable-daily@sha256:f90174cd4367ef07d69be201e72b6df364f5765482a1af227b5a8a83904d1c39"
-[private]
-aurora_nvidia := "ghcr.io/ublue-os/aurora-nvidia-open:stable-daily@sha256:0759c95dd3ad4e6d4427cf1a00b4988bf1997c26b260a98de7a0075f4ed56a83"
-[private]
-bazzite := "ghcr.io/ublue-os/bazzite-gnome-nvidia-open:stable@sha256:d6c00ad3c56b1b3c2e96e49a871e69c5fb933c2820027eeb6ba31179a05ff705"
-[private]
-bazzite_deck := "ghcr.io/ublue-os/bazzite-deck-gnome:stable@sha256:08e07a646257a6d717685a5f127b233c55664ec049ee02547b1791fae3cd8897"
-[private]
 bluefin := "ghcr.io/ublue-os/bluefin:gts@sha256:0a933e5c5d0016b6c0fb2bd7d9207fbb7d53b7f6f4918d3f6f4fb202ddbee854"
 [private]
 bluefin_nvidia := "ghcr.io/ublue-os/bluefin-nvidia:gts@sha256:2d34a9110b2e0a4aef15e14cdb5e4b1df889c24b5527df3fb7a99eb9cd0ca21e"
 [private]
 bluefin_dx := "ghcr.io/ublue-os/bluefin-dx:gts@sha256:ce67bb19fe844748770ab82d085452f578d4eb60f932535ba7ec7da371ca0204"
+[private]
+bluefin_dx_nvidia := "ghcr.io/ublue-os/bluefin-dx-nvidia:gts@sha256:bc7e9555eb4b20282c97e2230e4990b2c19cb2f2d40b5bca83e0d7e1428e6946"
 [private]
 ucore := "ghcr.io/ublue-os/ucore:stable-zfs@sha256:8c4ed43ccfc61b11ae2c3b6c9ea67d3d4e537600bd91666b9463dd1acac3c72b"
 [private]
