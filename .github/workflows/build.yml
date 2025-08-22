@@ -13,11 +13,11 @@ on: # yamllint disable-line rule:truthy rule:comments
   workflow_dispatch:
 
 jobs:
-  # lint:
-  #   name: Lint Project
-  #   permissions:
-  #     contents: read
-  #   uses: ./.github/workflows/lint.yml
+  lint:
+    name: Lint Project
+    permissions:
+      contents: read
+    uses: ./.github/workflows/lint.yml
 
   build-image:
     name: Build Images
