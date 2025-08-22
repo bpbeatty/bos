@@ -28,7 +28,6 @@ runs:
         "Desktop")
           images+=("bluefin" "bluefin-nvidia")
           images+=("bluefin-dx" "bluefin-dx-nvidia")
-          images+=("bluefin-gdx" "bluefin-lts")
           ;;
         "Server")
           images+=("cayo")
