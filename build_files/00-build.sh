@@ -27,7 +27,7 @@ ${DNF} remove -y \
 
 # install
 ${DNF} install -y clevis clevis-dracut clevis-udisks2 firefox firefox-langpacks \
-  vim gqrx yq # fedora-logos
+  freeipa-client vim gqrx yq # fedora-logos
 
 ${DNF} install -y /tmp/rpms/config/bpbeatty-signing*.rpm
 
