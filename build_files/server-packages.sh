@@ -10,7 +10,6 @@ SERVER_PACKAGES=(
     clevis
     clevis-dracut
     clevis-udisks2
-    cpp
     erofs-utils
     firefox
     firefox-langpacks
