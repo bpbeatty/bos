@@ -2,7 +2,7 @@
 
 # git commit to come back to https://github.com/ublue-os/bluefin/pull/1901/files#diff-cf4f1789e456b3edec8b3b7228dc4e1d629c8ff7287de198f44d53e7c5d4c671
 
-set -ouex pipefail
+set ${SET_X:+-x} -eou pipefail
 
 echo "::group:: ===$(basename "$0")==="
 
@@ -51,3 +51,5 @@ EOF
 # cat /usr/share/ublue-os/bluefin-cli/ptyxis-integration >> /etc/containers/systemd/users/"$i".container
 printf "\n\n[Install]\nWantedBy=%s.target" "$i" >> /etc/containers/systemd/users/"$i".container
 done
+
+echo "::endgroup::"

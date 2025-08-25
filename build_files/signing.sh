@@ -32,5 +32,7 @@ docker:
     use-sigstore-attachments: true
 EOF
 
+# seems to be a bootc linting issue here
+rm -rf /usr/etc
 mkdir -p /usr/etc/containers/
 cp /etc/containers/policy.json /usr/etc/containers/policy.json
