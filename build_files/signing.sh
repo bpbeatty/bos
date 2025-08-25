@@ -2,6 +2,8 @@
 
 set ${SET_X:+-x} -eou pipefail
 
+echo "::group:: ===$(basename "$0")==="
+
 # Signing
 mkdir -p /etc/containers
 mkdir -p /etc/pki/containers
@@ -30,7 +32,5 @@ docker:
     use-sigstore-attachments: true
 EOF
 
-# seems to be a bootc linting issue here
-rm -rf /usr/etc
-# mkdir -p /usr/etc/containers/
-# cp /etc/containers/policy.json /usr/etc/containers/policy.json
+mkdir -p /usr/etc/containers/
+cp /etc/containers/policy.json /usr/etc/containers/policy.json
