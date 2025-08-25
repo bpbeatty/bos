@@ -26,7 +26,7 @@ case "${IMAGE}" in
     base_image="kinoite"
     ;;
 "ucore"*)
-    base_image="${BASE_IMAGE}"
+    base_image="coreos"
     ;;
 esac
 
