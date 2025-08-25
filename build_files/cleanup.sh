@@ -3,6 +3,8 @@
 
 set ${SET_X:+-x} -eou pipefail
 
+echo "::group:: ===$(basename "$0")==="
+
 repos=(
     charm
     docker-ce
@@ -51,7 +53,7 @@ for kernel_dir in /usr/lib/modules/*; do
     fi
 done
 
-$DNF clean all
+dnf5 clean all
 
 rm -rf /tmp/*
 rm -rf /var/*

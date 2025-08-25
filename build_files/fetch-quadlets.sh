@@ -4,6 +4,8 @@
 
 set -ouex pipefail
 
+echo "::group:: ===$(basename "$0")==="
+
 # Make Directory
 mkdir -p /etc/containers/systemd/users
 
