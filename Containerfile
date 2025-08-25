@@ -10,7 +10,7 @@ COPY cosign.pub /
 # Base Image
 FROM ${BASE_IMAGE}:${TAG_VERSION} as base
 
-# ARG BASE_IMAGE="bluefin"
+ARG BASE_IMAGE="bluefin"
 ARG IMAGE="bluefin"
 ARG SET_X=""
 ARG VERSION="bos"
