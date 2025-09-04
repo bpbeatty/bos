@@ -4,8 +4,8 @@ set ${SET_X:+-x} -eou pipefail
 
 echo "::group:: ===$(basename "$0")==="
 
-if [ ! -f /etc/ublue-os/system-flatpaks.list || \
-  -f /etc/ublue-os/system-flatpaks-x.list ]; then
+if [ ! -f /etc/ublue-os/system-flatpaks.list ] || \
+  [ ! -f /etc/ublue-os/system-flatpaks-x.list ]; then
   echo "system-flatpak list missing!"
   exit 1
 fi
