@@ -27,5 +27,6 @@ rsync -rvK /ctx/usr /
 #### Example for enabling a System Unit File
 
 # systemctl enable podman.socket
+systemctl enable remote-fs.target
 
 echo "::endgroup::"
