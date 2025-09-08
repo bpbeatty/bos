@@ -3,7 +3,9 @@
   extends: [
     'config:best-practices',
   ],
-  baseBranches: ['master'],
+  baseBranchPatterns: [
+    'master',
+  ],
   rebaseWhen: 'never',
   customManagers: [
     {
@@ -76,9 +78,9 @@
     {
       matchFileNames: [
         '.devcontainer.json',
-        'Containerfile'
+        'Containerfile',
       ],
-      enabled: false
+      enabled: false,
     },
   ],
 }
