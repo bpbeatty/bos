@@ -3,9 +3,7 @@
   extends: [
     'config:best-practices',
   ],
-  baseBranchPatterns: [
-    'master',
-  ],
+  baseBranchPatterns: [ '$default', 'master'],
   rebaseWhen: 'never',
   customManagers: [
     {

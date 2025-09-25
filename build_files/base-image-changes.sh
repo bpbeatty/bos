@@ -20,6 +20,7 @@ app/com.jeffser.Alpaca
 app/com.mastermindzh.tidal-hifi
 app/com.mattjakeman.ExtensionManager
 app/com.valvesoftware.Steam
+app/io.github.dweymouth.supersonic
 app/io.freetubeapp.FreeTube
 app/io.github.dvlv.boxbuddyrs
 app/io.github.flattool.Ignition
