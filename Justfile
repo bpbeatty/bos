@@ -40,7 +40,7 @@ images := '(
 [private]
 rechunker := "ghcr.io/hhd-dev/rechunk:v1.2.3@sha256:51ffc4c31ac050c02ae35d8ba9e5f5e518b76cfc9b37372df4b881974978443c"
 [private]
-qemu := "ghcr.io/qemus/qemu:7.20@sha256:72961e08364ee995dbf89e7a9865c6c28bdf83b8a49280426b0d8e6f7a9b27ef"
+qemu := "ghcr.io/qemus/qemu:7.21@sha256:24e268aa4e8546c736d475fcb74d9d8f83b9717fe56a52aca7bf502e280c7ade"
 [private]
 cosign-installer := "cgr.dev/chainguard/cosign:latest@sha256:e5c465cdca3a275afed5f81b8a440c961b3e9930b8ba66423fdb7b9d4f509de5"
 [private]
