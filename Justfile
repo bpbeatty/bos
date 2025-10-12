@@ -38,11 +38,11 @@ images := '(
 # Build Containers
 
 [private]
-rechunker := "ghcr.io/hhd-dev/rechunk:v1.2.3@sha256:51ffc4c31ac050c02ae35d8ba9e5f5e518b76cfc9b37372df4b881974978443c"
+rechunker := "ghcr.io/hhd-dev/rechunk:v1.2.4@sha256:8a84bd5a029681aa8db523f927b7c53b5aded9b078b81605ac0a2fedc969f528"
 [private]
-qemu := "ghcr.io/qemus/qemu:7.21@sha256:24e268aa4e8546c736d475fcb74d9d8f83b9717fe56a52aca7bf502e280c7ade"
+qemu := "ghcr.io/qemus/qemu:7.23@sha256:43993c9772b3cd2325829587f4dd01901388b7fcdc335bb817af714957d81e61"
 [private]
-cosign-installer := "cgr.dev/chainguard/cosign:latest@sha256:e5c465cdca3a275afed5f81b8a440c961b3e9930b8ba66423fdb7b9d4f509de5"
+cosign-installer := "cgr.dev/chainguard/cosign:latest@sha256:29d514586cc8a82899b5856362f61188e19d05df420ae7f0f2b1288486bf5c02"
 [private]
 syft-installer := "ghcr.io/anchore/syft:v1.33.0@sha256:f94e5d9fce1f2278491a8e3a63bd5f6ddb81fdfdbb8bf7a1637565c1d5344357"
 
