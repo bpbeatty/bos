@@ -5,36 +5,36 @@ images:
   - name: akmods-stable
     image: ghcr.io/ublue-os/akmods
     tag: coreos-stable-42
-    digest: sha256:566a828c1185f7591bc82cd6705858b5b1406d878621232e79e8e880dc813541
+    digest: sha256:5772b8ffe8152e44bfe178276027d5359d936cb9238044f8b0e1b81ee1854e8b
   - name: akmods-stable-41
     image: ghcr.io/ublue-os/akmods
     tag: coreos-stable-41
-    digest: sha256:1b517b9d7e5804f3e449c56f10db05682cfa598056c460fcdaa9a77431e168a1
+    digest: sha256:303bb9d2bdd024d4d65aaedf8c5c9ca005e0abda938e4d395a2d5290306736db
   - name: akmods-nvidia-open-stable
     image: ghcr.io/ublue-os/akmods-nvidia-open
     tag: coreos-stable-42
-    digest: sha256:e4e0e24ae33a7e8335ee03ca164fd02ed595e6279cd8582849182a1fb3fefb83
+    digest: sha256:2468a156c0e9acafd7962315aec793af25db3e705bb8bccb7f456a7090ac852d
   - name: akmods-zfs-stable
     image: ghcr.io/ublue-os/akmods-zfs
     tag: coreos-stable-42
-    digest: sha256:611c99c77dab3143c2d93e147361172db44e689013af7d4cbdccb236826ea88f
+    digest: sha256:90f94c9e1a47ddfd6076d843b2829fee8c0622463d91ea6ab4a4f8c1f4058e0e
 
   # Testing
   - name: akmods-testing
     image: ghcr.io/ublue-os/akmods
     tag: coreos-testing-42
-    digest: sha256:6a5e7ca8ea9c562eb13f8d6547930398a8fab4bcff4e0c0ba6b1f357fc79bf68
+    digest: sha256:d91a038a14c01515439987c7eeaee00b07039a07c11f74643fc87a2623245d09
   - name: akmods-nvidia-open-testing
     image: ghcr.io/ublue-os/akmods-nvidia-open
     tag: coreos-testing-42
-    digest: sha256:d4acf7f515a1450d3d9e5ebcc4499d328193ca78ca42982a8fae14652229815f
+    digest: sha256:fc19d78719e93db6429870568544e840fde42c8b35e47dd31519fd01526e88ac
   - name: akmods-zfs-testing
     image: ghcr.io/ublue-os/akmods-zfs
     tag: coreos-testing-42
-    digest: sha256:259cef4bb8b6c20c0651fa0f055986f7470a482961b0529816f5962fec112abd
+    digest: sha256:154271e714afebbe9c2661e46b6501ae7681c55787ec5f2a1d4f3accd380865b
 
   # Fedora 42
   - name: base-42
     image: ghcr.io/ublue-os/base-main
     tag: 42
-    digest: sha256:70d9ee3b45fd9e22a6d6e2f492079f41c3a304d87f2a4e52792cdfbc5096b7ba
+    digest: sha256:7e32326e5d3686c4069410798caad99c05ff5d786380413e7077389c162f0fae
