@@ -17,8 +17,8 @@ images := '(
     # Stable Images / GTS
     [bluefin]=' + bluefin + '
     [bluefin-dx]=' + bluefin_dx + '
-    [bluefin-nvidia]=' + bluefin_nvidia + '
-    [bluefin-dx-nvidia]=' + bluefin_dx_nvidia + '
+    [bluefin-nvidia-open]=' + bluefin_nvidia_open + '
+    [bluefin-dx-nvidia-open]=' + bluefin_dx_nvidia_open + '
     [ucore]=' + ucore + '
     [ucore-nvidia]=' + ucore_nvidia + '
 
@@ -51,11 +51,11 @@ syft-installer := "ghcr.io/anchore/syft:v1.34.2@sha256:ee1df8b04a53e303238785d20
 [private]
 bluefin := "ghcr.io/ublue-os/bluefin:gts@sha256:2158efa01f595ebbe4813ab4928f35658bfb5d26f9c46d447979bbe53ecc6414"
 [private]
-bluefin_nvidia := "ghcr.io/ublue-os/bluefin-nvidia:gts@sha256:89e96002dea902c33be83284716ff28f513465d4b7747df73455c84c65bc163d"
+bluefin_nvidia_open := "ghcr.io/ublue-os/bluefin-nvidia-open:gts@sha256:d19b4023f0d8858764ee295e8ccd23813fe8f2e62c8efb7d8559cddd0e9cf6ba"
 [private]
 bluefin_dx := "ghcr.io/ublue-os/bluefin-dx:gts@sha256:1d0de7636173c1243cab40d8f6e813d7aeb7de98c77762f9721c81fc70abd53b"
 [private]
-bluefin_dx_nvidia := "ghcr.io/ublue-os/bluefin-dx-nvidia:gts@sha256:f49497661714c8e1a6a0540af46c353a4dd511b0f8fbce6940ca5eb59928dcfb"
+bluefin_dx_nvidia_open := "ghcr.io/ublue-os/bluefin-dx-nvidia-open:gts@sha256:78ee21c2a42d73c910558b46c8befadae9e98ef1f3b2939f9212dd61367db3e1"
 [private]
 ucore := "ghcr.io/ublue-os/ucore:stable-zfs@sha256:450ea95674555e480e1d8952f0df51aef09edb68217d0f7fc438bd6c4e5f706c"
 [private]
