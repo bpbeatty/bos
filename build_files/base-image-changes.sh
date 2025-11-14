@@ -31,9 +31,11 @@ app/org.libreoffice.LibreOffice
 app/org.torproject.torbrowser-launcher
 app/tv.kodi.Kodi" \
   >> /etc/ublue-os/system-flatpaks.list
+# remove flatpak
+sed -i 's/^.*firefox$//g' /etc/ublue-os/system-flatpaks.list
+# no duplicates
 cat /etc/ublue-os/system-flatpaks.list | sort -u -o \
   /etc/ublue-os/system-flatpaks.list
-
 echo "app/com.flashforge.FlashPrint" \
   >> /etc/ublue-os/system-flatpaks-dx.list
 cat /etc/ublue-os/system-flatpaks-dx.list | sort -u -o \
