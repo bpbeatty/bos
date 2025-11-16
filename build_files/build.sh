@@ -12,8 +12,6 @@ rsync -rvK /ctx/usr /
 
 /ctx/branding.sh
 
-/ctx/signing.sh
-
 /ctx/composefs.sh
 
 /ctx/server-packages.sh
