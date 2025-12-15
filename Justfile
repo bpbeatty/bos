@@ -61,17 +61,17 @@ ucore := "ghcr.io/ublue-os/ucore:stable-zfs@sha256:ec2bfae0a8aa84add04ee802a8b11
 [private]
 ucore_nvidia := "ghcr.io/ublue-os/ucore:stable-nvidia-zfs@sha256:ecda298f835a15eddd203a574428ab1358c3bf103532eb607f0f15c3006aa83b"
 [private]
-aurora_beta := "ghcr.io/ublue-os/aurora:latest@sha256:5419e14ac8879955e795dcd66ffee1d24a0def2105404f8dded11ea922724379"
+aurora_beta := "ghcr.io/ublue-os/aurora:latest@sha256:cc0f4d399a88fa04eaacafea33225499750208371a8805b0452bd353390ba0a8"
 [private]
-aurora_nvidia_beta := "ghcr.io/ublue-os/aurora-nvidia-open:latest@sha256:6c71c9b9e707a46e1c47d6dc18a8dd6f66203a48fa73f4713522e75c0ef97008"
+aurora_nvidia_beta := "ghcr.io/ublue-os/aurora-nvidia-open:latest@sha256:78748446e9bbfd9774fec03a06f00ace12f0513836f2d8151faddc8588fe62fe"
 [private]
-bazzite_beta := "ghcr.io/ublue-os/bazzite-gnome-nvidia-open:testing@sha256:db32ed46fd5ae5d2fdcb3cdae1afc11fcbef478e9835f0228c2423fe83fbb5d6"
+bazzite_beta := "ghcr.io/ublue-os/bazzite-gnome-nvidia-open:testing@sha256:2fc790a8e2ea1aae88058e0b0bf87b14888e9c8ccc086ca860acd9bcb547870b"
 [private]
-bazzite_deck_beta := "ghcr.io/ublue-os/bazzite-deck-gnome:testing@sha256:0e7e3e7dcfc192517551f531bba87e6d2b4642a87e49170765bd10bb9dc11835"
+bazzite_deck_beta := "ghcr.io/ublue-os/bazzite-deck-gnome:testing@sha256:3995f9134ea3a6781797dea822a9fbd1b60e118a58e9a2ffd518d43369c87905"
 [private]
-bluefin_beta := "ghcr.io/ublue-os/bluefin:latest@sha256:ed37ed67507dc2de9fdcbba7e0d1ccff144b867f250e54e95a76e79f0bac8e43"
+bluefin_beta := "ghcr.io/ublue-os/bluefin:latest@sha256:c14eb7d198cdf89405daad026c53a57ad18527301adc93102effaa99b43bf880"
 [private]
-bluefin_nvidia_beta := "ghcr.io/ublue-os/bluefin-nvidia-open:latest@sha256:518077c6a49d521b7da882ee2eb534e538a477f147b0d02f861f6ce680a12ca8"
+bluefin_nvidia_beta := "ghcr.io/ublue-os/bluefin-nvidia-open:latest@sha256:1f2d9dcb20d6c7373e5fa48132e4a3f7fb51b15f0e36465fb7952a951448dbf9"
 [private]
 ucore_beta := "ghcr.io/ublue-os/ucore:testing-zfs@sha256:71f47c5cac34ae48714026ea1a8197730ce6bd172cf1d1c394cdb1e5626c96b2"
 [private]
