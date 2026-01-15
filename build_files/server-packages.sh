@@ -54,8 +54,6 @@ dnf5 remove -y "${REMOVE_PACKAGES[@]}"
 
 dnf5 install -y "${SERVER_PACKAGES[@]}"
 
-dnf5 install -y /tmp/rpms/config/bpbeatty-signing*.rpm
-
 # The superior default editor
 dnf5 swap -y \
     nano-default-editor vim-default-editor
