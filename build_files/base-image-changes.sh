@@ -4,41 +4,46 @@ set ${SET_X:+-x} -eou pipefail
 
 echo "::group:: ===$(basename "$0")==="
 
-if [ ! -f /etc/ublue-os/system-flatpaks.list ] || \
-  [ ! -f /etc/ublue-os/system-flatpaks-dx.list ]; then
+flatpak_path='/usr/share/ublue-os/homebrew'
+system_flatpaks='system-flatpaks.Brewfile'
+dx_flatpaks='system-dx-flatpaks.Brewfile'
+
+
+if [ ! -f "${flatpak_path}"/"${system_flatpaks}" ] || \
+  [ ! -f "${flatpak_path}"/"${dx_flatpaks}" ]; then
   echo "system-flatpak list missing!"
   exit 1
 fi
 
-echo "app/com.discordapp.Discord
-app/com.getpostman.Postman
-app/com.heroicgameslauncher.hgl
-app/com.jeffser.Alpaca
-app/com.mastermindzh.tidal-hifi
-app/com.valvesoftware.Steam
-app/io.github.dweymouth.supersonic
-app/io.freetubeapp.FreeTube
-app/io.github.dvlv.boxbuddyrs
-app/io.github.pwr_solaar.solaar
-app/io.github.TransmissionRemoteGtk
-app/im.riot.Riot
-app/net.lutris.Lutris
-app/org.freedesktop.Piper
-app/org.gimp.GIMP
-app/org.gnucash.GnuCash
-app/org.keepassxc.KeePassXC
-app/org.libreoffice.LibreOffice
-app/org.torproject.torbrowser-launcher
-app/tv.kodi.Kodi" \
-  >> /etc/ublue-os/system-flatpaks.list
+echo 'flatpak "com.discordapp.Discord"
+flatpak "com.getpostman.Postman"
+flatpak "com.heroicgameslauncher.hgl"
+flatpak "com.jeffser.Alpaca"
+flatpak "com.mastermindzh.tidal-hifi"
+flatpak "com.valvesoftware.Steam"
+flatpak "io.github.dweymouth.supersonic"
+flatpak "io.freetubeapp.FreeTube"
+flatpak "io.github.dvlv.boxbuddyrs"
+flatpak "io.github.pwr_solaar.solaar"
+flatpak "io.github.TransmissionRemoteGtk"
+flatpak "im.riot.Riot"
+flatpak "net.lutris.Lutris"
+flatpak "org.freedesktop.Piper"
+flatpak "org.gimp.GIMP"
+flatpak "org.gnucash.GnuCash"
+flatpak "org.keepassxc.KeePassXC"
+flatpak "org.libreoffice.LibreOffice"
+flatpak "org.torproject.torbrowser-launcher"
+flatpak "tv.kodi.Kodi"' \
+  >> "${flatpak_path}"/"${system_flatpaks}"
 # remove flatpak
-sed -i 's/^.*firefox$//g' /etc/ublue-os/system-flatpaks.list
+sed -i 's/^.*firefox$//g' "${flatpak_path}"/"${system_flatpaks}"
 # no duplicates
-cat /etc/ublue-os/system-flatpaks.list | sort -u -o \
-  /etc/ublue-os/system-flatpaks.list
-echo "app/com.flashforge.FlashPrint" \
-  >> /etc/ublue-os/system-flatpaks-dx.list
-cat /etc/ublue-os/system-flatpaks-dx.list | sort -u -o \
-  /etc/ublue-os/system-flatpaks-dx.list
+cat "${flatpak_path}"/"${system_flatpaks}" | sort -u -o \
+  "${flatpak_path}"/"${system_flatpaks}"
+echo ' flatpak "com.flashforge.FlashPrint"' \
+  >> "${flatpak_path}"/"${dx_flatpaks}"
+cat "${flatpak_path}"/"${dx_flatpaks}" | sort -u -o \
+  "${flatpak_path}"/"${dx_flatpaks}"
 
 echo "::endgroup::"
