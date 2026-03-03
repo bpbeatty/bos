@@ -58,8 +58,8 @@ dnf5 install -y "${SERVER_PACKAGES[@]}"
 dnf5 swap -y \
     nano-default-editor vim-default-editor
 
-dnf5 -y remove bluefin-plymouth
-dnf5 -y swap bluefin-logos fedora-logos
+# dnf5 -y remove bluefin-plymouth
+dnf5 -y swap generic-logos fedora-logos
 
 dnf5 install -y /tmp/rpms/config/bpbeatty-signing*.rpm
 
