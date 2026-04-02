@@ -6,10 +6,10 @@ These are my customized personal versions of the Universal Blue project. Everyth
 
 ## Tags
 
-- `bos:bluefin` - bluefin:gts
-- `bos:bluefin-dx` - bluefin-dx:gts
-- `bos:bluefin-nvidia` - bluefin-nvidia:gts
-- `bos:bluefin-dx-nvidia` - bluefin-dx-nvidia:gts
+- `bos:bluefin` - bluefin:stable
+- `bos:bluefin-dx` - bluefin-dx:stable
+- `bos:bluefin-nvidia` - bluefin-nvidia:stable
+- `bos:bluefin-dx-nvidia` - bluefin-dx-nvidia:stable
 
 ### How to rebase
 

@@ -17,7 +17,6 @@ SERVER_PACKAGES=(
     gqrx
     just
     jq
-    python-ramalama
     rclone
     sbsigntools
     skopeo

@@ -19,7 +19,6 @@ repos=(
     nvidia-container-toolkit
     rpm-fusion-nonfree-nvidia-driver
     rpm-fusion-nonfree-steam
-    tailscale
     terra
     ublue-os-packages-fedora-"$(rpm -E %fedora)"
     ublue-os-packages-epel-"$(rpm -E %centos)"
