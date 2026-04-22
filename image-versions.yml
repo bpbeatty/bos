@@ -2,21 +2,70 @@
 # yamllint disable rule:line-length rule:comments
 images:
   # Stable
-  - name: akmods-stable-42
+  - name: akmods-stable
     image: ghcr.io/ublue-os/akmods
-    tag: coreos-stable-42
-    digest: sha256:720ca6a101f7ae327fa6066496b93aa78fb84654e9dc44b22fa29311f48d18af
-  - name: akmods-nvidia-open-stable-42
+    tag: coreos-stable-43
+    digest: sha256:83c6169aac4b61783778860d2ee009c9329c4aaa4c9be0915f326d8f4afe7a2d
+  - name: akmods-nvidia-open-stable
     image: ghcr.io/ublue-os/akmods-nvidia-open
-    tag: coreos-stable-42
-    digest: sha256:154ee5edb154a446e5116d132e6e4efbad17acb27e18cb65e8957c5ec125ffd6
-  - name: akmods-zfs-stable-42
+    tag: coreos-stable-43
+    digest: sha256:bc2f9d16c409529f0db4cc0bae3d41967e1031f2ffae7a300c88e2c2ff28c413
+  - name: akmods-zfs-stable
     image: ghcr.io/ublue-os/akmods-zfs
-    tag: coreos-stable-42
-    digest: sha256:967cf445566caefbaddbca573fabce70cf9eed0d9184a5ef10a886d1a76339cf
+    tag: coreos-stable-43
+    digest: sha256:48b49fff168254e9f391bce20e3a28edbc5708f155b19f516535ed75efef2c84
 
-  # Fedora 42
-  - name: base-42
+  - name: base-43
     image: ghcr.io/ublue-os/base-main
-    tag: 42
-    digest: sha256:2651fd3d2523736ca04098d76671986ad6e44c0cf51040fb6ef50f04599a4520
+    tag: 43
+    digest: sha256:9f4ec4c03e5eff9bb58e233863826f44377ceb722f8117d68baa27bdc3c4ca99
+  # Bazzite
+  - name: bazzite-gnome
+    image: ghcr.io/ublue-os/bazzite-gnome
+    tag: stable
+    digest: sha256:a4c790085f82e1f3ed348f266e5778193dc989207732a215e4d51203bdf80c13
+
+  # Bluefin
+  - name: bluefin
+    image: ghcr.io/ublue-os/bluefin
+    tag: stable-daily
+    digest: sha256:2a9664f8c299d6e15dba920a56ca214679e25048e4d04f9e970779092e4c3d7a
+
+  - name: bluefin-dx
+    image: ghcr.io/ublue-os/bluefin-dx
+    tag: stable-daily
+    digest: sha256:58fb44e2d07b3481c91c7f52c764dbdbf999b8613e698a338ea805ab892253f5
+
+  - name: bluefin-nvidia
+    image: ghcr.io/ublue-os/bluefin-nvidia-open
+    tag: stable-daily
+    digest: sha256:0786d266d4bf077c4b628e4c4ae682e6d0deb52a604891478f530940e09c35f4
+
+  - name: bluefin-nvidia-dx
+    image: ghcr.io/ublue-os/bluefin-dx-nvidia-open
+    tag: stable-daily
+    digest: sha256:783d066c54fda5233137a2199a3a807b1b6e006c74d7777814519acb31d935ed
+
+  # Brew
+  - name: brew
+    image: ghcr.io/ublue-os/brew
+    tag: latest
+    digest: sha256:d10f9b3117be2d2ca60cd3ae5e21ceb0317898d637b40a8291d9b913b454f095
+
+  # Common
+  - name: common
+    image: ghcr.io/projectbluefin/common
+    tag: latest
+    digest: sha256:9409d0c08bf76bdfef52812db61a68453b20b23b52042e810a447ada3c72c9c1
+
+  # Chunkah
+  - name: chunkah
+    image: quay.io/jlebon/chunkah
+    tag: dev
+    digest: sha256:97dfc8d55e57cd4ec5a3a0eea9ba37b3611988726946450fef3e063a901c51da
+
+  # QEMU
+  - name: qemu
+    image: ghcr.io/qemus/qemu
+    tag: 7.29
+    digest: sha256:a2a76a6b5d2304a132c7fda832670af972c1e1437d48b4bc3dea08d001b08eba

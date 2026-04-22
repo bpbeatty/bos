@@ -15,67 +15,35 @@ FQ_IMAGE_NAME := IMAGE_REGISTRY / repo_image_name
 images := '(
 
     # Stable Images / GTS
+    [bazzite-gnome]=' + bazzite_gnome + '
     [bluefin]=' + bluefin + '
     [bluefin-dx]=' + bluefin_dx + '
-    [bluefin-nvidia-open]=' + bluefin_nvidia_open + '
-    [bluefin-dx-nvidia-open]=' + bluefin_dx_nvidia_open + '
-    [ucore]=' + ucore + '
-    [ucore-nvidia]=' + ucore_nvidia + '
+    [bluefin-nvidia]=' + bluefin_nvidia + '
+    [bluefin-dx-nvidia]=' + bluefin_dx_nvidia + '
 
-    # Beta Images
-    [aurora-beta]=' + aurora_beta + '
-    [aurora-nvidia-beta]=' + aurora_nvidia_beta + '
-    [bazzite-beta]=' + bazzite_beta + '
-    [bazzite-deck-beta]=' + bazzite_deck_beta + '
-    [bluefin-beta]=' + bluefin_beta + '
-    [bluefin-nvidia-beta]=' + bluefin_nvidia_beta + '
-    [cosmic-beta]="cosmic"
-    [cosmic-nvidia-beta]="cosmic-nvidia-open"
-    [ucore-beta]=' + ucore_beta + '
-    [ucore-nvidia-beta]=' + ucore_nvidia_beta + '
 )'
 
 # Build Containers
 
 [private]
-rechunker := "ghcr.io/hhd-dev/rechunk:v1.2.4@sha256:8a84bd5a029681aa8db523f927b7c53b5aded9b078b81605ac0a2fedc969f528"
+chunkah := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)\"" $1', image-file, "chunkah")
 [private]
-qemu := "ghcr.io/qemus/qemu:7.29@sha256:a2a76a6b5d2304a132c7fda832670af972c1e1437d48b4bc3dea08d001b08eba"
+qemu := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "qemu")
 [private]
 cosign-installer := "ghcr.io/sigstore/cosign/cosign:v2.4.1"
-[private]
-syft-installer := "ghcr.io/anchore/syft:v1.42.2@sha256:15952b4306fd990724afaaf7f1c71fcd03546b89fbf6f2d32b0be5f81e3ef431"
 
 # Base Containers
 
 [private]
-bluefin := "ghcr.io/ublue-os/bluefin:stable@sha256:e4ba89384852518e7a646209de5cc9107b3df0eb753cc1d623e124e343fe10f4"
+bazzite_gnome := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "bazzite-gnome")
 [private]
-bluefin_nvidia_open := "ghcr.io/ublue-os/bluefin-nvidia-open:stable@sha256:8cb487ca128f14640dbeef9f813479c39e5a4b94958305c26fe523c212244814"
+bluefin := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "bluefin")
 [private]
-bluefin_dx := "ghcr.io/ublue-os/bluefin-dx:stable@sha256:7e0efc74bbd431a9c1b2f75cb13c22ff96f5c535ef695c96d535587a943073d6"
+bluefin_nvidia := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "bluefin-nvidia-open")
 [private]
-bluefin_dx_nvidia_open := "ghcr.io/ublue-os/bluefin-dx-nvidia-open:stable@sha256:6ab2b0d757d6f5ff20d73d91c7c67f5e894e92395cea4eb06af89354f3fdf65a"
+bluefin_dx := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "bluefin-dx")
 [private]
-ucore := "ghcr.io/ublue-os/ucore:stable-zfs@sha256:ec2bfae0a8aa84add04ee802a8b116995dc8ce609b193540655203e4abcf3937"
-[private]
-ucore_nvidia := "ghcr.io/ublue-os/ucore:stable-nvidia-zfs@sha256:ecda298f835a15eddd203a574428ab1358c3bf103532eb607f0f15c3006aa83b"
-[private]
-aurora_beta := "ghcr.io/ublue-os/aurora:latest@sha256:60262ffa4c71cb1b56b1b6d3232c4b4cc97b00c6492a9235e755cf914929c226"
-[private]
-aurora_nvidia_beta := "ghcr.io/ublue-os/aurora-nvidia-open:latest@sha256:c0266445fdcffb68bc5cebdef97a9c1f9f0c9207563f3425b5a9adf930e962e6"
-[private]
-bazzite_beta := "ghcr.io/ublue-os/bazzite-gnome-nvidia-open:testing@sha256:e6811224e25df92fc545fccaacce9372ae6e3e8bfc0be475f119bcdbac5965b9"
-[private]
-bazzite_deck_beta := "ghcr.io/ublue-os/bazzite-deck-gnome:testing@sha256:e5764267f495947c6240b244ac80289bef0c9e2925a9f6a0a1d5228aa9c07afb"
-[private]
-bluefin_beta := "ghcr.io/ublue-os/bluefin:latest@sha256:343195c73b9cebce319696e757effe29f99e0f87eb80b1821413769670a8de71"
-[private]
-bluefin_nvidia_beta := "ghcr.io/ublue-os/bluefin-nvidia-open:latest@sha256:99667a8aa77de76eb06b3067406d275960d98920bf2bf1ac657b74675c7d1f13"
-[private]
-ucore_beta := "ghcr.io/ublue-os/ucore:testing-zfs@sha256:71f47c5cac34ae48714026ea1a8197730ce6bd172cf1d1c394cdb1e5626c96b2"
-[private]
-ucore_nvidia_beta := "ghcr.io/ublue-os/ucore:testing-nvidia-zfs@sha256:ded20788bbd11957552c950c53733fe15726c46e397306edad2533fea75dc149"
+bluefin_dx_nvidia := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "bluefin-dx-nvidia")
 
 [private]
 default:
@@ -100,7 +68,7 @@ clean:
 
 # Build
 [group('Image')]
-build image="bluefin": install-cosign (build-image image) (secureboot "localhost" / repo_image_name + ":" + image) (rechunk image) (load-image image)
+build image="bluefin": (build-image image) (secureboot "localhost" / repo_image_name + ":" + image) (rechunk image)
 
 # Build Image
 [group('Image')]
@@ -121,8 +89,8 @@ build-image image="bluefin":
     fi
 
     BUILD_ARGS=({{ if CI != '' { '--cpp-flag=-DGHCI' } else { '' } }})
-    mkdir -p {{ BUILD_DIR }}
-    BUILDTMP="$(mktemp -d -p {{ BUILD_DIR }})"
+    mkdir -p {{ GIT_ROOT / BUILD_DIR }}
+    BUILDTMP="$(mktemp -d -p {{ GIT_ROOT / BUILD_DIR }})"
     trap 'rm -rf $BUILDTMP' EXIT SIGINT
 
     set -eoux pipefail
@@ -131,7 +99,7 @@ build-image image="bluefin":
     "aurora"*|"bluefin"*) BUILD_ARGS+=("--cpp-flag=-DDESKTOP") ;;
     "bazzite"*) BUILD_ARGS+=("--cpp-flag=-DBAZZITE") ;;
     "cosmic"*)
-        {{ if image =~ 'beta' { 'bluefin=${images[bluefin]}' } else { 'bluefin="${images[bluefin-beta]}"' } }}
+        {{ if image =~ 'beta' { 'bluefin=${images[bluefin-beta]}' } else { 'bluefin="${images[bluefin]}"' } }}
         verify-container "${bluefin#*-os/}"
         fedora_version="$(skopeo inspect docker://"${bluefin/:*@/@}" | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')"
         check="$(yq -r ".images[] | select(.name == \"base-${fedora_version}\")" {{ image-file }} | yq -r "\"\(.image):\(.tag)@\(.digest)\"")"
@@ -144,7 +112,9 @@ build-image image="bluefin":
     verify-container "${check#*-os/}"
 
     # AKMODS
-    {{ if image =~ 'beta' { 'akmods_version=testing' } else if image =~ 'aurora|bluefin|cosmic' { 'akmods_version=stable-42' } else { '' } }}
+    {{ if image =~ 'beta' { 'akmods_version=testing' } else if image =~ 'aurora|bluefin|cosmic' { 'akmods_version=stable' } else { '' } }}
+
+    # TODO: should instead take advantage of the kernel version tags on the akmods images to avoid skew between nvidia/zfs and akmods.
 
     # akmods
     {{ if image =~ 'aurora|bluefin|cosmic' { 'akmods="$(yq -r ".images[] | select(.name == \"akmods-${akmods_version}\")" ' + image-file + ' | yq -r "\"\(.image):\(.tag)@\(.digest)\"")"' } else { '' } }}
@@ -158,7 +128,7 @@ build-image image="bluefin":
     {{ if image =~ 'cosmic-nv.*|(aurora-nv.*|bluefin-nv.*)-beta' { 'akmods_nvidia="$(yq -r ".images[] | select(.name == \"akmods-nvidia-open-${akmods_version}\")" ' + image-file + ' | yq -r "\"\(.image):\(.tag)@\(.digest)\"")"' } else { '' } }}
     {{ if image =~ 'cosmic-nv.*|(aurora-nv.*|bluefin-nv.*)-beta' { 'verify-container "${akmods_nvidia#*-os/}"; BUILD_ARGS+=("--cpp-flag=-DNVIDIA=$akmods_nvidia")' } else { '' } }}
 
-    skopeo inspect docker://{{ if image =~ 'cosmic|(aurora.*|bluefin.*)-beta' { '${akmods/:*@/@}' } else { '${check/:*@/@}' } }} > "$BUILDTMP/inspect-{{ image }}.json"
+    skopeo inspect docker://{{ if image =~ 'cosmic|(aurora.*|bluefin.*)-beta' { '"${akmods/:*@/@}"' } else { '"${check/:*@/@}"' } }} > "$BUILDTMP/inspect-{{ image }}.json"
 
     # Get The Version
     fedora_version="$(jq -r '.Labels["ostree.linux"]' < "$BUILDTMP/inspect-{{ image }}.json" | grep -oP 'fc\K[0-9]+')"
@@ -183,12 +153,15 @@ build-image image="bluefin":
 
     # Labels
     BUILD_ARGS+=(
+        "--inherit-labels=false"
         "--label" "org.opencontainers.image.description={{ repo_image_name }} is my OCI image built from ublue projects. It mainly extends them for my uses."
         "--label" "org.opencontainers.image.source=https://github.com/{{ repo_name }}/{{ repo_image_name }}"
         "--label" "org.opencontainers.image.title={{ repo_image_name }}"
         "--label" "org.opencontainers.image.version=$VERSION"
         "--label" "ostree.kernel_flavor={{ if image =~ 'bazzite' { 'bazzite' } else if image =~ 'beta' { 'coreos-testing' } else { 'coreos-stable' } }}"
         "--label" "ostree.linux=$(jq -r '.Labels["ostree.linux"]' < "$BUILDTMP"/inspect-{{ image }}.json)"
+        "--label" "containers.bootc=1"
+        "--label" "ostree.bootable=true"
     )
 
     #Build Args
@@ -199,7 +172,16 @@ build-image image="bluefin":
         "--build-arg" "VERSION=$VERSION"
     )
 
-    {{ PODMAN }} build "${BUILD_ARGS[@]}" --security-opt label=disable --file Containerfile --tag localhost/{{ repo_image_name + ':' + image }} {{ justfile_dir() }}
+    {{ if env("GITHUB_TOKEN", "") != "" { 'echo "Adding GitHub Token as build secret..."; BUILD_ARGS+=("--secret" "id=GITHUB_TOKEN,env=GITHUB_TOKEN")' } else { '' } }}
+
+    # Additional Args
+    BUILD_ARGS+=(
+        "--security-opt" "label=disable"
+        "--file" "Containerfile"
+        "--tag" "{{ repo_image_name + ":" + image }}"
+    )
+
+    {{ PODMAN }} build "${BUILD_ARGS[@]}" {{ GIT_ROOT }}
 
     {{ if CI != '' { PODMAN + ' rmi -f "${check%@*}"' } else { '' } }}
 
@@ -207,94 +189,37 @@ build-image image="bluefin":
 [group('Image')]
 rechunk image="bluefin":
     #!/usr/bin/bash
-    {{ PODMAN }} image exists localhost/{{ repo_image_name + ":" + image }} || { exit 1 ; }
-
-    if [[ "${UID}" -gt "0" && "{{ PODMAN }}" =~ podman$ ]]; then
-       # Use Podman Unshare, and then exit
-       {{ PODMAN }} unshare -- {{ just }} rechunk {{ image }}
-       # Exit with previous exit code
-       exit "$?"
-    fi
-
+    {{ shell('mkdir -p $1', GIT_ROOT / BUILD_DIR) }}
     {{ ci_grouping }}
     echo "################################################################################"
     echo "image  := {{ image }}"
     echo "PODMAN := {{ PODMAN }}"
     echo "CI     := {{ CI }}"
+    echo "whoami := {{ shell("whoami") }}"
     echo "################################################################################"
-    set -eoux pipefail
+    set -eou pipefail
+    {{ if CI != '' { 'set -x' } else { '' } }}
+    IMG="localhost/{{ repo_image_name + ":" + image }}"
+    {{ PODMAN }} image exists "$IMG" || { echo "Image $IMG not found. Please build the image first." >&2; exit 1; }
+    TMPDIR="$(mktemp -d -p {{ GIT_ROOT / BUILD_DIR }})"
+    trap 'rm -rf "$TMPDIR"' EXIT SIGINT
 
-    CREF=$({{ PODMAN }} create localhost/{{ repo_image_name }}:{{ image }} bash)
-    OUT_NAME="{{ repo_image_name }}_{{ image }}.tar"
-    VERSION="$({{ PODMAN }} inspect "$CREF" | jq -r '.[].Config.Labels["org.opencontainers.image.version"]')"
-    LABELS="
-    org.opencontainers.image.description={{ repo_image_name }} is my OCI image built from ublue projects. It mainly extends them for my uses.
-    org.opencontainers.image.revision=$(git rev-parse HEAD)
-    org.opencontainers.image.source=https://github.com/{{ repo_name }}/{{ repo_image_name }}
-    org.opencontainers.image.title={{ repo_image_name }}:{{ image }}
-    ostree.kernel_flavor={{ if image =~ 'bazzite' { 'bazzite' } else if image =~ 'beta' { 'coreos-testing' } else { 'coreos-stable' } }}
-    ostree.linux=$({{ PODMAN }} inspect "$CREF" | jq -r '.[].Config.Labels["ostree.linux"]')
-    "
-    if [[ ! "{{ PODMAN }}" =~ remote ]]; then
-        MOUNT=$({{ PODMAN }} mount "$CREF")
-    else
-        MOUNTFS="{{ BUILD_DIR }}/{{ image }}_rootfs"
-        {{ SUDOIF }} rm -rf "$MOUNTFS"
-        mkdir -p "$MOUNTFS"
-        {{ PODMAN }} export "$CREF" | tar --xattrs-include='*' -p -xf - -C "$MOUNTFS"
-        MOUNT="{{ GIT_ROOT }}/$MOUNTFS"
-        {{ PODMAN }} rm "$CREF"
-        {{ PODMAN }} rmi -f localhost/{{ repo_image_name }}:{{ image }}
-    fi
-    {{ PODMAN }} run --rm \
-        --security-opt label=disable \
-        --volume "$MOUNT":/var/tree \
-        --env TREE=/var/tree \
-        --user 0:0 \
-        {{ rechunker }} \
-        /sources/rechunk/1_prune.sh
-    {{ PODMAN }} run --rm \
-        --security-opt label=disable \
-        --volume "$MOUNT":/var/tree \
-        --volume "cache_ostree:/var/ostree" \
-        --env TREE=/var/tree \
-        --env REPO=/var/ostree/repo \
-        --env RESET_TIMESTAMP=1 \
-        --user 0:0 \
-        {{ rechunker }} \
-        /sources/rechunk/2_create.sh
-    if [[ ! "{{ PODMAN }}" =~ remote ]]; then
-        {{ PODMAN }} unmount "$CREF"
-        {{ PODMAN }} rm "$CREF"
-        {{ PODMAN }} rmi -f localhost/{{ repo_image_name }}:{{ image }}
-    else
-        {{ SUDOIF }} rm -rf "$MOUNTFS"
-    fi
-    {{ PODMAN }} run --rm \
-        --security-opt label=disable \
-        --volume "{{ GIT_ROOT }}:/workspace" \
-        --volume "{{ GIT_ROOT }}:/var/git" \
-        --volume cache_ostree:/var/ostree \
-        --env REPO=/var/ostree/repo \
-        --env PREV_REF={{ FQ_IMAGE_NAME + ":" + image }} \
-        --env LABELS="$LABELS" \
-        --env OUT_NAME="$OUT_NAME" \
-        --env VERSION="$VERSION" \
-        --env VERSION_FN=/workspace/version.txt \
-        --env OUT_REF="oci-archive:$OUT_NAME" \
-        --env GIT_DIR="/var/git" \
-        --user 0:0 \
-        {{ rechunker }} \
-        /sources/rechunk/3_chunk.sh
-    {{ PODMAN }} volume rm cache_ostree
+    {{ PODMAN }} inspect "$IMG" > "$TMPDIR/inspect.json"
 
-# Load Image into Podman and Tag
-[group('Image')]
-load-image image="bluefin":
-    #!/usr/bin/bash
-    {{ if CI == '' { '' } else { 'exit 0' } }}
-    {{ PODMAN }} tag "$({{ PODMAN + " pull oci-archive:" + repo_image_name + "_" + image + ".tar" }})" localhost/{{ repo_image_name + ":" + image }}
-    {{ PODMAN }} tag localhost/{{ repo_image_name + ":" + image }} localhost/{{ repo_image_name }}:"$(skopeo inspect oci-archive:{{ repo_image_name + '_' + image + '.tar' }} | jq -r '.Labels["org.opencontainers.image.version"]')"
+    {{ PODMAN }} run --rm \
+        --security-opt label=disable \
+        --mount=type=bind,source="$TMPDIR/inspect.json",target=/tmp/inspect.json,ro \
+        --mount=type=image,source="$IMG",target=/chunkah \
+        {{ chunkah }} build \
+        {{ if CI != '' { '-v' } else { '' } }} \
+            --prune /sysroot/ \
+            --max-layers=448 \
+            --config /tmp/inspect.json \
+        > {{ repo_image_name + "_" + image + ".tar" }}
+
+    {{ PODMAN }} images
+    {{ if CI != '' { PODMAN + ' system reset --force' } else { PODMAN + ' rmi -f $IMG' } }}
+    {{ skopeo }} copy oci-archive:{{ repo_image_name + "_" + image + ".tar" }} containers-storage:{{ FQ_IMAGE_NAME + ":" + image }} 
     {{ PODMAN }} images
 
 # Build ISO
@@ -330,7 +255,7 @@ changelogs target="Desktop" urlmd="" handwritten="":
 
 # Verify Container with Cosign
 [group('Utility')]
-verify-container container registry="ghcr.io/ublue-os" key="": install-cosign
+verify-container container registry="ghcr.io/ublue-os" key="":
     if ! cosign verify --key "{{ if key == '' { 'https://raw.githubusercontent.com/ublue-os/main/main/cosign.pub' } else { key } }}" "{{ if registry != '' { registry / container } else { container } }}" >/dev/null; then \
         echo "NOTICE: Verification failed. Please ensure your public key is correct." && exit 1 \
     ; fi
@@ -447,8 +372,6 @@ lint-recipes:
     recipes=(
         build-image
         build-iso
-        changelogs
-        cosign-sign
         gen-sbom
         rechunk
         run-iso
@@ -460,42 +383,11 @@ lint-recipes:
     done
     recipes=(
         clean
-        install-cosign
         lint-recipes
-        merge-changelog
     )
     for recipe in "${recipes[@]}"; do
         {{ just }} _lint-recipe "shellcheck" "$recipe"
     done
-
-# Get Cosign if Needed
-[group('CI')]
-install-cosign:
-    #!/usr/bin/bash
-    {{ ci_grouping }}
-    set -euox pipefail
-
-    # Get Cosign from Chainguard
-    if ! command -v cosign >/dev/null; then
-        # TMPDIR
-        TMPDIR="$(mktemp -d)"
-        trap 'rm -rf $TMPDIR' EXIT SIGINT
-
-        # Get Binary
-        COSIGN_CONTAINER_ID="$({{ PODMAN }} create {{ cosign-installer }} bash)"
-        {{ PODMAN }} cp "${COSIGN_CONTAINER_ID}":/ko-app/cosign "$TMPDIR"/cosign
-        {{ PODMAN }} rm -f "${COSIGN_CONTAINER_ID}"
-        {{ PODMAN }} rmi -f {{ cosign-installer }}
-
-        # Install
-        {{ SUDOIF }} install -c -m 0755 "$TMPDIR"/cosign /usr/local/bin/cosign
-
-        # Verify Cosign Image Signatures if needed
-        # if ! cosign verify --certificate-oidc-issuer=https://token.actions.githubusercontent.com --certificate-identity=https://github.com/chainguard-images/images/.github/workflows/release.yaml@refs/heads/main cgr.dev/chainguard/cosign >/dev/null; then
-        #     echo "NOTICE: Failed to verify cosign image signatures."
-        #     exit 1
-        # fi
-    fi
 
 # Login to GHCR
 [group('CI')]
@@ -512,7 +404,7 @@ push-to-registry image dryrun="true" $destination="":
 
 # Sign Images with Cosign
 [group('CI')]
-cosign-sign digest $destination="": install-cosign
+cosign-sign digest $destination="":
     cosign sign -y --key env://COSIGN_PRIVATE_KEY "${destination:-{{ IMAGE_REGISTRY }}}/{{ repo_image_name + "@" + digest }}"
 
 # Push and Sign
@@ -521,7 +413,7 @@ push-and-sign image: (login-to-ghcr env('ACTOR') env('TOKEN')) (push-to-registry
 
 # Generate SBOM
 [group('CI')]
-gen-sbom $input $output="": install-syft
+gen-sbom $input $output="":
     #!/usr/bin/bash
     set -eoux pipefail
 
@@ -536,32 +428,32 @@ gen-sbom $input $output="": install-syft
     # Output Path
     echo "$OUTPUT_PATH"
 
-# Install Syft
-[group('CI')]
-install-syft:
-    #!/usr/bin/bash
-    {{ ci_grouping }}
-    set -eoux pipefail
-
-    # Get SYFT if needed
-    if ! command -v syft >/dev/null; then
-        # Make TMPDIR
-        TMPDIR="$(mktemp -d)"
-        trap 'rm -rf $TMPDIR' EXIT SIGINT
-
-        # Get Binary
-        SYFT_ID="$({{ PODMAN }} create {{ syft-installer }})"
-        {{ PODMAN }} cp "$SYFT_ID":/syft "$TMPDIR"/syft
-        {{ PODMAN }} rm -f "$SYFT_ID" > /dev/null
-        {{ PODMAN }} rmi -f {{ syft-installer }}
-
-        # Install
-        {{ SUDOIF }} install -c -m 0755 "$TMPDIR"/syft /usr/local/bin/syft
-    fi
-
+# # Install Syft
+# [group('CI')]
+# install-syft:
+#     #!/usr/bin/bash
+#     {{ ci_grouping }}
+#     set -eoux pipefail
+# 
+#     # Get SYFT if needed
+#     if ! command -v syft >/dev/null; then
+#         # Make TMPDIR
+#         TMPDIR="$(mktemp -d)"
+#         trap 'rm -rf $TMPDIR' EXIT SIGINT
+# 
+#         # Get Binary
+#         SYFT_ID="$({{ PODMAN }} create {{ syft-installer }})"
+#         {{ PODMAN }} cp "$SYFT_ID":/syft "$TMPDIR"/syft
+#         {{ PODMAN }} rm -f "$SYFT_ID" > /dev/null
+#         {{ PODMAN }} rmi -f {{ syft-installer }}
+# 
+#         # Install
+#         {{ SUDOIF }} install -c -m 0755 "$TMPDIR"/syft /usr/local/bin/syft
+#     fi
+# 
 # Add SBOM Signing
 [group('CI')]
-sbom-sign input $sbom="": install-cosign
+sbom-sign input $sbom="":
     #!/usr/bin/bash
     set -eoux pipefail
 
@@ -590,9 +482,9 @@ sbom-sign input $sbom="": install-cosign
     # Verify Signature
     cosign verify-blob "${SBOM_VERIFY_ARGS[@]}"
 
-# SBOM Attest
+# SBOM Attach (ORAS attach + cosign sign)
 [group('CI')]
-sbom-attest input $sbom="" $destination="": install-cosign
+sbom-attach input $sbom="" $destination="":
     #!/usr/bin/bash
     set -eoux pipefail
 
