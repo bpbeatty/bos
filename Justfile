@@ -29,6 +29,8 @@ images := '(
 chunkah := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)\"" $1', image-file, "chunkah")
 [private]
 qemu := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "qemu")
+[private]
+cosign-installer := "ghcr.io/sigstore/cosign/cosign:v2.4.1"
 
 # Base Containers
 
@@ -41,7 +43,7 @@ bluefin_nvidia := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.imag
 [private]
 bluefin_dx := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "bluefin-dx")
 [private]
-bluefin_dx_nvidia_open := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "bluefin-dx-nvidia")
+bluefin_dx_nvidia := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "bluefin-dx-nvidia")
 
 [private]
 default:
