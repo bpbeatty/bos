@@ -14,7 +14,7 @@ FQ_IMAGE_NAME := IMAGE_REGISTRY / repo_image_name
 [private]
 images := '(
 
-    # Stable Images / GTS
+    # Stable Images
     [bazzite-gnome]=' + bazzite_gnome + '
     [bluefin]=' + bluefin + '
     [bluefin-dx]=' + bluefin_dx + '
@@ -29,8 +29,6 @@ images := '(
 chunkah := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)\"" $1', image-file, "chunkah")
 [private]
 qemu := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "qemu")
-[private]
-cosign-installer := "ghcr.io/sigstore/cosign/cosign:v2.4.1"
 
 # Base Containers
 
@@ -39,7 +37,7 @@ bazzite_gnome := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image
 [private]
 bluefin := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "bluefin")
 [private]
-bluefin_nvidia := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "bluefin-nvidia-open")
+bluefin_nvidia := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "bluefin-nvidia")
 [private]
 bluefin_dx := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "bluefin-dx")
 [private]
@@ -96,16 +94,8 @@ build-image image="bluefin":
     set -eoux pipefail
 
     case "{{ image }}" in
-    "aurora"*|"bluefin"*) BUILD_ARGS+=("--cpp-flag=-DDESKTOP") ;;
+    "bluefin"*) BUILD_ARGS+=("--cpp-flag=-DDESKTOP") ;;
     "bazzite"*) BUILD_ARGS+=("--cpp-flag=-DBAZZITE") ;;
-    "cosmic"*)
-        {{ if image =~ 'beta' { 'bluefin=${images[bluefin-beta]}' } else { 'bluefin="${images[bluefin]}"' } }}
-        verify-container "${bluefin#*-os/}"
-        fedora_version="$(skopeo inspect docker://"${bluefin/:*@/@}" | jq -r '.Labels["ostree.linux"]' | grep -oP 'fc\K[0-9]+')"
-        check="$(yq -r ".images[] | select(.name == \"base-${fedora_version}\")" {{ image-file }} | yq -r "\"\(.image):\(.tag)@\(.digest)\"")"
-        BUILD_ARGS+=("--cpp-flag=-DCOSMIC")
-        ;;
-    "ucore"*) BUILD_ARGS+=("--cpp-flag=-DSERVER") ;;
     esac
 
     # Check Base Container
@@ -225,9 +215,10 @@ rechunk image="bluefin":
 # Build ISO
 [group('ISO')]
 build-iso image="bluefin":
-    {{ shell("mkdir -p $1/output", BUILD_DIR) }}
+    {{ shell("mkdir -p $1/output", GIT_ROOT / BUILD_DIR) }}
     {{ SUDOIF }} \
-        HOOK_post_rootfs={{ GIT_ROOT / "iso_files/configure_iso.sh" }} \
+        HOOK_pre_initramfs="{{ if image =~ 'bazzite' { GIT_ROOT / 'iso_files/preinitramfs.sh' } else { '' } }}" \
+        HOOK_post_rootfs="{{ GIT_ROOT / 'iso_files/configure_iso.sh' }}" \
         CI="{{ CI }}" \
         {{ just }} titanoboa::build \
         {{ FQ_IMAGE_NAME + ":" + image }} \
@@ -238,8 +229,8 @@ build-iso image="bluefin":
         {{ FQ_IMAGE_NAME + ":" + image }} \
         "1"
     {{ SUDOIF }} chown "$(id -u):$(id -g)" output.iso
-    sha256sum output.iso | tee {{ BUILD_DIR / "output" / repo_image_name + "-" + image + ".iso-CHECKSUM" }}
-    mv output.iso {{ BUILD_DIR / "output" / repo_image_name + "-" + image + ".iso" }}
+    sha256sum output.iso | tee {{ GIT_ROOT / BUILD_DIR / "output" / repo_image_name + "-" + image + ".iso-CHECKSUM" }}
+    mv output.iso {{ GIT_ROOT / BUILD_DIR / "output" / repo_image_name + "-" + image + ".iso" }}
     {{ SUDOIF }} {{ just }} titanoboa::clean
 
 # Run ISO
@@ -247,11 +238,6 @@ build-iso image="bluefin":
 run-iso image="bluefin":
     {{ if path_exists(GIT_ROOT / BUILD_DIR / "output" / repo_image_name + "-" + image + ".iso") == "true" { '' } else { just + " build-iso " + image } }}
     {{ just }} titanoboa::container-run-vm {{ GIT_ROOT / BUILD_DIR / "output" / repo_image_name + "-" + image + ".iso" }}
-
-# Test Changelogs
-[group('Changelogs')]
-changelogs target="Desktop" urlmd="" handwritten="":
-    python3 changelogs.py {{ target }} ./output-{{ target }}.env ./changelog-{{ target }}.md --workdir . --handwritten "{{ handwritten }}" --urlmd "{{ urlmd }}"
 
 # Verify Container with Cosign
 [group('Utility')]
@@ -307,28 +293,6 @@ secureboot image="bluefin":
         {{ PODMAN }} rm -f "${temp_name}"
     fi
     exit "$returncode"
-
-# Merge Changelogs
-[group('Changelogs')]
-merge-changelog type="stable":
-    #!/usr/bin/bash
-    set -eoux pipefail
-    rm -f changelog.md
-    cat {{ if type =~ 'beta' { 'changelog-Beta-Desktop.md changelog-Beta-Bazzite.md' } else { 'changelog-Desktop.md changelog-Bazzite.md' } }} > changelog.md
-    last_tag=$(git tag --list {{ repo_image_name }}-\* | sort -V | tail -1)
-    date_extract="$(echo "${last_tag:-}" | grep -oP '{{ repo_image_name }}-\K[0-9]+')"
-    date_version="$(echo "${last_tag:-}" | grep -oP '\.\K[0-9]+$' || true)"
-    if [[ "${date_extract:-}" == "$(date +%Y%m%d)" ]]; then
-        tag="{{ repo_image_name }}-${date_extract:-}.$(( ${date_version:-} + 1 ))"
-    else
-        tag="{{ repo_image_name }}-$(date +%Y%m%d)"
-    fi
-    cat << EOF
-    {
-        "title": "$tag{{ if type =~ 'beta' { '-beta' } else { '' } }} (#$(git rev-parse --short HEAD))",
-        "tag": "$tag{{ if type =~ 'beta' { '-beta' } else { '' } }}"
-    }
-    EOF
 
 # Lint Files
 [group('Utility')]
@@ -428,29 +392,6 @@ gen-sbom $input $output="":
     # Output Path
     echo "$OUTPUT_PATH"
 
-# # Install Syft
-# [group('CI')]
-# install-syft:
-#     #!/usr/bin/bash
-#     {{ ci_grouping }}
-#     set -eoux pipefail
-# 
-#     # Get SYFT if needed
-#     if ! command -v syft >/dev/null; then
-#         # Make TMPDIR
-#         TMPDIR="$(mktemp -d)"
-#         trap 'rm -rf $TMPDIR' EXIT SIGINT
-# 
-#         # Get Binary
-#         SYFT_ID="$({{ PODMAN }} create {{ syft-installer }})"
-#         {{ PODMAN }} cp "$SYFT_ID":/syft "$TMPDIR"/syft
-#         {{ PODMAN }} rm -f "$SYFT_ID" > /dev/null
-#         {{ PODMAN }} rmi -f {{ syft-installer }}
-# 
-#         # Install
-#         {{ SUDOIF }} install -c -m 0755 "$TMPDIR"/syft /usr/local/bin/syft
-#     fi
-# 
 # Add SBOM Signing
 [group('CI')]
 sbom-sign input $sbom="":
@@ -480,7 +421,7 @@ sbom-sign input $sbom="":
     )
 
     # Verify Signature
-    cosign verify-blob "${SBOM_VERIFY_ARGS[@]}"
+    {{ cosign }} verify-blob "${SBOM_VERIFY_ARGS[@]}"
 
 # SBOM Attach (ORAS attach + cosign sign)
 [group('CI')]
@@ -493,39 +434,18 @@ sbom-attach input $sbom="" $destination="":
         sbom="$({{ just }} gen-sbom {{ input }})"
     fi
 
-    # Compress
-    sbom_type="urn:ublue-os:attestation:spdx+json+zstd:v1"
-    compress_sbom="$sbom.zst"
-    zstd "$sbom" -o "$compress_sbom"
-
-    # Generate Payload
-    base64_payload="payload.b64"
-    base64 "$compress_sbom" | tr -d '\n' > "$base64_payload"
-
-    # Generate Predicate
-    predicate_file="wrapped-predicate.json"
-    jq -n \
-            --arg compression "zstd" \
-            --arg mediaType "application/spdx+json" \
-            --rawfile payload "$base64_payload" \
-            '{compression: $compression, mediaType: $mediaType, payload: $payload}' \
-            > "$predicate_file"
-
-    rm "$base64_payload"
-
-    # SBOM Attest args
-    SBOM_ATTEST_ARGS=(
-        "--predicate" "$predicate_file"
-        "--type" "$sbom_type"
-        "--key" "env://COSIGN_PRIVATE_KEY"
-    )
-
     : "${destination:={{ IMAGE_REGISTRY }}}"
-    digest="$(skopeo inspect "{{ input }}" --format '{{{{ .Digest }}')"
+    TMPDIR="$(mktemp -d -p .)"
+    trap 'rm -rf "$TMPDIR"' EXIT SIGINT
+    {{ skopeo }} inspect "{{ input }}" > "$TMPDIR/info.json"
+    digest="$({{ jq }} -r '.Digest' < "$TMPDIR/info.json")"
+    version="$({{ jq }} -r '.Labels["org.opencontainers.image.version"]' < "$TMPDIR/info.json")"
 
-    cosign attest -y \
-        "${SBOM_ATTEST_ARGS[@]}" \
-        "$destination/{{ repo_image_name }}@${digest}"
+    pushd "$(dirname "$sbom")" > /dev/null
+    {{ oras }} attach "$destination/{{ repo_image_name }}@${digest}" "$(basename "$sbom")" --artifact-type application/vnd.spdx+json -a "filename=$(basename "$sbom")" -a "org.opencontainers.image.version=$version"
+    sbom_digest="$({{ oras }} discover "$destination/{{ repo_image_name }}@${digest}" --artifact-type application/vnd.spdx+json --format json | {{ jq }} -r '.manifests[0].digest')"
+    {{ cosign }} sign -y --key env://COSIGN_PRIVATE_KEY "$destination/{{ repo_image_name }}@${sbom_digest}"
+    popd > /dev/null
 
 # Utils
 
@@ -538,11 +458,17 @@ just := just_executable() + " -f " + justfile()
 [private]
 image-file := GIT_ROOT / "image-versions.yml"
 [private]
-yq := require("yq")
+yq := which("yq")
 [private]
-jq := require("jq")
+jq := which("jq")
 [private]
-skopeo := require("skopeo")
+skopeo := which("skopeo")
+[private]
+oras := which("oras")
+[private]
+cosign := which("cosign")
+[private]
+syft := which("syft")
 
 # SUDO
 
