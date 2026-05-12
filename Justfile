@@ -29,6 +29,8 @@ images := '(
 chunkah := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)\"" $1', image-file, "chunkah")
 [private]
 qemu := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "qemu")
+[private]
+cosign-installer := "ghcr.io/sigstore/cosign/cosign:v2.4.1"
 
 # Base Containers
 
@@ -66,7 +68,7 @@ clean:
 
 # Build
 [group('Image')]
-build image="bluefin": (build-image image) (secureboot "localhost" / repo_image_name + ":" + image) (rechunk image)
+build image="bluefin": install-cosign (build-image image) (secureboot "localhost" / repo_image_name + ":" + image) (rechunk image)
 
 # Build Image
 [group('Image')]
@@ -241,7 +243,7 @@ run-iso image="bluefin":
 
 # Verify Container with Cosign
 [group('Utility')]
-verify-container container registry="ghcr.io/ublue-os" key="":
+verify-container container registry="ghcr.io/ublue-os" key="": install-cosign
     if ! cosign verify --key "{{ if key == '' { 'https://raw.githubusercontent.com/ublue-os/main/main/cosign.pub' } else { key } }}" "{{ if registry != '' { registry / container } else { container } }}" >/dev/null; then \
         echo "NOTICE: Verification failed. Please ensure your public key is correct." && exit 1 \
     ; fi
@@ -347,11 +349,35 @@ lint-recipes:
     done
     recipes=(
         clean
+        install-cosign
         lint-recipes
     )
     for recipe in "${recipes[@]}"; do
         {{ just }} _lint-recipe "shellcheck" "$recipe"
     done
+
+# Get Cosign if Needed
+[group('CI')]
+install-cosign:
+    #!/usr/bin/bash
+    {{ ci_grouping }}
+    set -euox pipefail
+
+    # Get Cosign from Chainguard
+    if ! command -v cosign >/dev/null; then
+        # TMPDIR
+        TMPDIR="$(mktemp -d)"
+        trap 'rm -rf $TMPDIR' EXIT SIGINT
+
+        # Get Binary
+        COSIGN_CONTAINER_ID="$({{ PODMAN }} create {{ cosign-installer }} bash)"
+        {{ PODMAN }} cp "${COSIGN_CONTAINER_ID}":/ko-app/cosign "$TMPDIR"/cosign
+        {{ PODMAN }} rm -f "${COSIGN_CONTAINER_ID}"
+        {{ PODMAN }} rmi -f {{ cosign-installer }}
+
+        # Install
+        {{ SUDOIF }} install -c -m 0755 "$TMPDIR"/cosign /usr/local/bin/cosign
+    fi
 
 # Login to GHCR
 [group('CI')]
@@ -368,7 +394,7 @@ push-to-registry image dryrun="true" $destination="":
 
 # Sign Images with Cosign
 [group('CI')]
-cosign-sign digest $destination="":
+cosign-sign digest $destination="": install-cosign
     cosign sign -y --key env://COSIGN_PRIVATE_KEY "${destination:-{{ IMAGE_REGISTRY }}}/{{ repo_image_name + "@" + digest }}"
 
 # Push and Sign
@@ -425,7 +451,7 @@ sbom-sign input $sbom="":
 
 # SBOM Attach (ORAS attach + cosign sign)
 [group('CI')]
-sbom-attach input $sbom="" $destination="":
+sbom-attest input $sbom="" $destination="": install-cosign
     #!/usr/bin/bash
     set -eoux pipefail
 
