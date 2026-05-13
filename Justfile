@@ -29,8 +29,6 @@ images := '(
 chunkah := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)\"" $1', image-file, "chunkah")
 [private]
 qemu := shell('yq -r ".images[] | select(.name == \"$2\") | \"\\(.image):\\(.tag)@\\(.digest)\"" $1', image-file, "qemu")
-[private]
-cosign-installer := "ghcr.io/sigstore/cosign/cosign:v2.4.1"
 
 # Base Containers
 
@@ -68,7 +66,7 @@ clean:
 
 # Build
 [group('Image')]
-build image="bluefin": install-cosign (build-image image) (secureboot "localhost" / repo_image_name + ":" + image) (rechunk image)
+build image="bluefin": (build-image image) (secureboot "localhost" / repo_image_name + ":" + image) (rechunk image)
 
 # Build Image
 [group('Image')]
@@ -242,7 +240,7 @@ run-iso image="bluefin":
 
 # Verify Container with Cosign
 [group('Utility')]
-verify-container container registry="ghcr.io/ublue-os" key="": install-cosign
+verify-container container registry="ghcr.io/ublue-os" key="":
     if ! cosign verify --key "{{ if key == '' { 'https://raw.githubusercontent.com/ublue-os/main/main/cosign.pub' } else { key } }}" "{{ if registry != '' { registry / container } else { container } }}" >/dev/null; then \
         echo "NOTICE: Verification failed. Please ensure your public key is correct." && exit 1 \
     ; fi
@@ -348,57 +346,52 @@ lint-recipes:
     done
     recipes=(
         clean
-        install-cosign
         lint-recipes
     )
     for recipe in "${recipes[@]}"; do
         {{ just }} _lint-recipe "shellcheck" "$recipe"
     done
 
-# Get Cosign if Needed
-[group('CI')]
-install-cosign:
-    #!/usr/bin/bash
-    {{ ci_grouping }}
-    set -euox pipefail
-
-    # Get Cosign from Chainguard
-    if ! command -v cosign >/dev/null; then
-        # TMPDIR
-        TMPDIR="$(mktemp -d)"
-        trap 'rm -rf $TMPDIR' EXIT SIGINT
-
-        # Get Binary
-        COSIGN_CONTAINER_ID="$({{ PODMAN }} create {{ cosign-installer }} bash)"
-        {{ PODMAN }} cp "${COSIGN_CONTAINER_ID}":/ko-app/cosign "$TMPDIR"/cosign
-        {{ PODMAN }} rm -f "${COSIGN_CONTAINER_ID}"
-        {{ PODMAN }} rmi -f {{ cosign-installer }}
-
-        # Install
-        {{ SUDOIF }} install -c -m 0755 "$TMPDIR"/cosign /usr/local/bin/cosign
-    fi
-
 # Login to GHCR
 [group('CI')]
 login-to-ghcr $user $token:
-    echo "$token" | podman login ghcr.io -u "$user" --password-stdin
-    {{ if `command -v docker || true` != '' { 'echo "$token" | docker login ghcr.io -u "$user" --password-stdin' } else { 'cat "${XDG_RUNTIME_DIR}/containers/auth.json" > ~/.docker/config.json' } }}
-
-# Push Images to Registry
-[group('CI')]
-push-to-registry image dryrun="true" $destination="":
-    for tag in {{ image }} {{ shell("skopeo inspect oci-archive:$1_$2.tar | jq -r '.Labels[\"org.opencontainers.image.version\"]'", repo_image_name, image) }}; do \
-        {{ if dryrun == "false" { 'skopeo copy oci-archive:' + repo_image_name + "_" + image + ".tar ${destination:-docker://" + IMAGE_REGISTRY + "}/" + repo_image_name + ":$tag >&2" } else { 'echo "$tag" >&2' } }} \
-    ; done
-
-# Sign Images with Cosign
-[group('CI')]
-cosign-sign digest $destination="": install-cosign
-    cosign sign -y --key env://COSIGN_PRIVATE_KEY "${destination:-{{ IMAGE_REGISTRY }}}/{{ repo_image_name + "@" + digest }}"
+    echo "$token" | {{ if which("podman") != "" { PODMAN + ' login ghcr.io -u "$user" --password-stdin' } else { 'docker login ghcr.io -u "$user" --password-stdin' } }}
+    {{ if which("podman") != "" { 'echo $token | ' + PODMAN + ' login ghcr.io -u "$user" --password-stdin --authfile ~/.docker/config.json' } else { '' } }}
 
 # Push and Sign
 [group('CI')]
-push-and-sign image: (login-to-ghcr env('ACTOR') env('TOKEN')) (push-to-registry image 'false' '') (cosign-sign shell('skopeo inspect oci-archive:$1_$2.tar --format "{{ .Digest }}"', repo_image_name, image))
+push-and-sign image dryrun="true" sign="false":
+    #!/usr/bin/bash
+    set -eoux pipefail
+
+    {{ shell('mkdir -p $1', BUILD_DIR) }}
+    trap 'rm -f {{ BUILD_DIR }}/{digest{,1,2},inspect.json}' EXIT SIGINT
+    skopeo inspect oci-archive:{{ repo_image_name }}_{{ image }}.tar > "{{ BUILD_DIR }}/inspect.json"
+
+    for tag in {{ image }} $(jq -r '.Labels["org.opencontainers.image.version"]' < "{{ BUILD_DIR }}/inspect.json"); do
+        # Push twice do to bug with annotations not getting pushed on the first time?
+        {{ if dryrun == "false" { 'skopeo copy --preserve-digests --digestfile ' + BUILD_DIR + '/digest1 oci-archive:' + repo_image_name + '_' + image + '.tar docker://' + IMAGE_REGISTRY + '/' + repo_image_name + ':$tag >&2' } else { 'echo "$tag" >&2' } }}
+        {{ if dryrun == "false" { 'skopeo copy --preserve-digests --digestfile ' + BUILD_DIR + '/digest2 oci-archive:' + repo_image_name + '_' + image + '.tar docker://' + IMAGE_REGISTRY + '/' + repo_image_name + ':$tag >&2' } else { 'echo "$tag" >&2' } }}
+    done
+
+    if [[ "{{ dryrun }}" == "true" ]]; then
+        echo "Dry run complete. Digests not pushed."
+        exit 0
+    fi
+
+    # Compare digests are the same, if not fail as something went wrong with the push
+    if ! diff {{ BUILD_DIR }}/{digest1,digest2} >/dev/null; then
+        echo "Digests are not the same..."
+        exit 1
+    else
+        mv {{ BUILD_DIR }}/digest{1,}
+        rm {{ BUILD_DIR }}/digest2
+    fi
+
+    # Sign the image with Cosign if enabled
+    if [[ "{{ sign }}" == "true" ]]; then
+        cosign sign -y --key env://COSIGN_PRIVATE_KEY "{{ IMAGE_REGISTRY + "/" + repo_image_name }}@$(cat {{ BUILD_DIR }}/digest)"
+    fi
 
 # Generate SBOM
 [group('CI')]
@@ -450,7 +443,7 @@ sbom-sign input $sbom="":
 
 # SBOM Attach (ORAS attach + cosign sign)
 [group('CI')]
-sbom-attest input $sbom="" $destination="": install-cosign
+sbom-attach input $sbom="" $destination="":
     #!/usr/bin/bash
     set -eoux pipefail
 
