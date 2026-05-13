@@ -41,7 +41,7 @@ images:
     tag: stable-daily
     digest: sha256:61d18d344500409082b9134fac3d93770b704b246341b229807b4d1a5311596d
 
-  - name: bluefin-nvidia-dx
+  - name: bluefin-dx-nvidia
     image: ghcr.io/ublue-os/bluefin-dx-nvidia-open
     tag: stable-daily
     digest: sha256:783d066c54fda5233137a2199a3a807b1b6e006c74d7777814519acb31d935ed
