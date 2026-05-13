@@ -22,15 +22,13 @@ runs:
         # Add Images
         case "${{ inputs.image_flavor }}" in
         "Bazzite")
-          images+=("bazzite" "bazzite-nvidia")
-          #images+=("bazzite-deck" "bazzite-deck-nvidia")
+          images+=("bazzite-gnome")
           ;;
         "Desktop")
           images+=("bluefin" "bluefin-dx")
-          images+=("bluefin-nvidia-open" "bluefin-dx-nvidia-open")
+          images+=("bluefin-nvidia" "bluefin-dx-nvidia")
           ;;
         "Server")
-          images+=("cayo")
           images+=("ucore-minimal" "ucore" "ucore-nvidia")
           images+=("ucore-hci" "ucore-hci-nvidia")
           ;;
