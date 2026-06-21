@@ -1,0 +1,180 @@
+---
+name: Generate SBOMs
+on: # yamllint disable-line rule:truthy rule:comments
+  workflow_call:
+    inputs:
+      image_flavor:
+        type: string
+    secrets:
+      SIGNING_SECRET:
+        required: true
+concurrency:
+  group: >-
+    ${{ github.workflow }}-${{ github.ref
+    || github.run_id }}-${{ inputs.image_flavor }}-sbom
+  cancel-in-progress: true
+env:
+  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+  IMAGE_NAME: ${{ github.event.repository.name }}
+  SET_X: 1
+
+jobs:
+  get-images:
+    name: Get Images for SBOMs
+    permissions:
+      actions: read
+    outputs:
+      images: ${{ steps.images.outputs.images }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        # yamllint disable-line rule:line-length rule:comments
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - name: Get Images for Build
+        id: images
+        uses: ./.github/actions/get-images
+        with:
+          image_flavor: ${{ inputs.image_flavor }}
+
+  sbom-image:
+    name: ${{ matrix.image }}
+    needs: ["get-images"]
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions:
+      contents: read
+      packages: write
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ["${{ fromJson(needs.get-images.outputs.images) }}"]
+    steps:
+      - name: Checkout
+        # yamllint disable-line rule:line-length rule:comments
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+
+      - name: Maximize Build Space
+        # if: ${{ ! contains(matrix.image, 'ucore') }}
+        # yamllint disable-line rule:line-length rule:comments
+        uses: ublue-os/remove-unwanted-software@cc0becac701cf642c8f0a6613bbdaf5dc36b259e # v9
+
+      - name: Setup Just
+        # yamllint disable-line rule:line-length rule:comments
+        uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3
+
+      - name: Download OCI-Archive
+        # yamllint disable-line rule:line-length rule:comments
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
+        with:
+          name: ${{ matrix.image }}.oci
+          path: ${{ runner.temp }}
+
+      - name: Setup
+        id: setup
+        run: |
+          set -eou pipefail
+          echo "=== FREE SPACE ==="
+          df -h
+          echo "=== MEMORY AND SWAP ==="
+          free -h
+          swapon --show
+          echo "=== MAKING SWAPFILE ==="
+          sudo swapoff /mnt/swapfile
+          sudo rm -f /mnt/swapfile
+          SWAP_FILE="/mnt/swapfile"
+          SWAP_FILE_2="/swapfile"
+          sudo fallocate -l 60G "$SWAP_FILE"
+          sudo fallocate -l 16G "$SWAP_FILE_2"
+          sudo chmod 600 "$SWAP_FILE"
+          sudo chmod 600 "$SWAP_FILE_2"
+          sudo mkswap "$SWAP_FILE"
+          sudo mkswap "$SWAP_FILE_2"
+          sudo swapon "$SWAP_FILE"
+          sudo swapon "$SWAP_FILE_2"
+          echo "=== FREE SPACE ==="
+          df -h
+          echo "=== MEMORY AND SWAP ==="
+          free -h
+          swapon --show
+
+      - name: Generate SBOM
+        id: gen
+        env:
+          OCI_ARCHIVE: ${{ env.IMAGE_NAME }}_${{ matrix.image }}.tar
+        run: |
+          just gen-sbom \
+            "oci-archive:${{ runner.temp }}/${{ env.OCI_ARCHIVE }}" \
+            "${{ runner.temp }}/${{ matrix.image }}.sbom.json"
+
+      - name: Scan SBOM
+        env:
+          OCI_ARCHIVE: ${{ env.IMAGE_NAME }}_${{ matrix.image }}.tar
+        # yamllint disable-line rule:line-length rule:comments
+        uses: anchore/scan-action@1638637db639e0ade3258b51db49a9a137574c3e # v6
+        id: scan
+        with:
+          sbom: ${{ runner.temp }}/${{ matrix.image }}.sbom.json
+          fail-build: false
+
+      - name: Inspect Sarif
+        run: cat ${{ steps.scan.outputs.sarif }}
+
+      - name: Upload Sarif Report
+        # yamllint disable-line rule:line-length rule:comments
+        uses: github/codeql-action/upload-sarif@2d92b76c45b91eb80fc44c74ce3fce0ee94e8f9d # v3
+        if: >-
+          contains(fromJson('["workflow_dispatch", "merge_group"]'),
+          github.event_name) || github.event.schedule == '41 6 * * 0'
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
+          category: ${{ matrix.image }}
+
+      - name: Login to GHCR, Attest and Sign
+        id: attest
+        if: >-
+          contains(fromJson('["workflow_dispatch", "merge_group"]'),
+          github.event_name) || github.event.schedule == '41 6 * * 0'
+        env:
+          COSIGN_EXPERIMENTAL: false
+          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+          OCI_ARCHIVE: ${{ env.IMAGE_NAME }}_${{ matrix.image }}.tar
+        shell: bash
+        run: |
+          set -eou pipefail
+
+          just login-to-ghcr ${{ github.actor }} ${{ github.token }}
+
+          just sbom-attest \
+            "oci-archive:${{ runner.temp }}/${{ env.OCI_ARCHIVE }}" \
+            ${{ runner.temp }}/${{ matrix.image }}.sbom.json
+
+          just sbom-sign \
+            "oci-archive:${{ runner.temp }}/${{ env.OCI_ARCHIVE }}" \
+            ${{ runner.temp }}/${{ matrix.image }}.sbom.json
+
+      - name: Upload SBOM
+        # yamllint disable-line rule:line-length rule:comments
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ${{ matrix.image }}.sbom
+          path: |-
+            ${{ runner.temp }}/${{ matrix.image }}.sbom.json*
+
+  check:
+    name: Check Gen SBOM Successful
+    permissions:
+      actions: read
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    needs: [sbom-image]
+    steps:
+      - name: Exit on failure
+        if: >-
+          ${{ contains(fromJson('["failure", "skipped"]'),
+          needs.sbom-image.result) }}
+        shell: bash
+        run: exit 1
+      - name: Exit
+        shell: bash
+        run: exit 0
