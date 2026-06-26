@@ -356,7 +356,8 @@ lint-recipes:
 # Login to GHCR
 [group('CI')]
 login-to-ghcr $user $token:
-    {{ PODMAN + ' login ghcr.io -u "$user" --password-stdin' }}
+    echo "$token" | {{ if /usr/bin/which("podman") != "" { PODMAN + ' login ghcr.io -u "$user" --password-stdin' } else { 'docker login ghcr.io -u "$user" --password-stdin' } }}
+    {{ if /usr/bin/which("podman") != "" { 'echo $token | ' + PODMAN + ' login ghcr.io -u "$user" --password-stdin --authfile ~/.docker/config.json' } else { '' } }}
 
 # Push and Sign
 [group('CI')]
@@ -476,29 +477,29 @@ just := just_executable() + " -f " + justfile()
 [private]
 image-file := GIT_ROOT / "image-versions.yml"
 [private]
-yq := which("yq")
+yq := /usr/bin/which("yq")
 [private]
-jq := which("jq")
+jq := /usr/bin/which("jq")
 [private]
-skopeo := which("skopeo")
+skopeo := /usr/bin/which("skopeo")
 [private]
-oras := which("oras")
+oras := /usr/bin/which("oras")
 [private]
-cosign := which("cosign")
+cosign := /usr/bin/which("cosign")
 [private]
-syft := which("syft")
+syft := /usr/bin/which("syft")
 
 # SUDO
 
 [private]
 SUDO_DISPLAY := env("DISPLAY", "") || env("WAYLAND_DISPLAY", "")
 [private]
-export SUDOIF := if `id -u` == "0" { "" } else if SUDO_DISPLAY != "" { which("sudo") + " --askpass" } else { which("sudo") }
+export SUDOIF := if `id -u` == "0" { "" } else if SUDO_DISPLAY != "" { /usr/bin/which("sudo") + " --askpass" } else { /usr/bin/which("sudo") }
 
 # Podman By Default
 
 [private]
-export PODMAN := env("PODMAN", "") || which("podman") || require("podman-remote")
+export PODMAN := env("PODMAN", "") || /usr/bin/which("podman") || require("podman-remote")
 
 # Utilities
 
