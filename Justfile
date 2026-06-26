@@ -491,13 +491,15 @@ oras := `which oras 2>/dev/null || true`
 cosign := `which cosign 2>/dev/null || true`
 [private]
 syft := `which syft 2>/dev/null || true`
+[private]
+SUDO_PATH := `which sudo 2>/dev/null || true`
 
 # SUDO
 
 [private]
 SUDO_DISPLAY := if env_var("DISPLAY") != "" { env_var("DISPLAY") } else if env_var("WAYLAND_DISPLAY") != "" { env_var("WAYLAND_DISPLAY") } else { "" }
 [private]
-export SUDOIF := if `id -u` == "0" { "" } else if SUDO_DISPLAY != "" { which("sudo") + " --askpass" } else { which("sudo") }
+export SUDOIF := if `id -u` == "0" { "" } else if SUDO_DISPLAY != "" { SUDO_PATH + " --askpass" } else { SUDO_PATH }
 
 # Podman By Default
 
