@@ -1,4 +1,5 @@
 set unstable
+set lists := true
 
 mod? titanoboa
 
@@ -356,8 +357,8 @@ lint-recipes:
 # Login to GHCR
 [group('CI')]
 login-to-ghcr $user $token:
-    echo "$token" | {{ if /usr/bin/which("podman") != "" { PODMAN + ' login ghcr.io -u "$user" --password-stdin' } else { 'docker login ghcr.io -u "$user" --password-stdin' } }}
-    {{ if /usr/bin/which("podman") != "" { 'echo $token | ' + PODMAN + ' login ghcr.io -u "$user" --password-stdin --authfile ~/.docker/config.json' } else { '' } }}
+    echo "$token" | {{ if which("podman") != "" { PODMAN + ' login ghcr.io -u "$user" --password-stdin' } else { 'docker login ghcr.io -u "$user" --password-stdin' } }}
+    {{ if which("podman") != "" { 'echo $token | ' + PODMAN + ' login ghcr.io -u "$user" --password-stdin --authfile ~/.docker/config.json' } else { '' } }}
 
 # Push and Sign
 [group('CI')]
@@ -477,29 +478,29 @@ just := just_executable() + " -f " + justfile()
 [private]
 image-file := GIT_ROOT / "image-versions.yml"
 [private]
-yq := /usr/bin/which("yq")
+yq := which("yq")
 [private]
-jq := /usr/bin/which("jq")
+jq := which("jq")
 [private]
-skopeo := /usr/bin/which("skopeo")
+skopeo := which("skopeo")
 [private]
-oras := /usr/bin/which("oras")
+oras := which("oras")
 [private]
-cosign := /usr/bin/which("cosign")
+cosign := which("cosign")
 [private]
-syft := /usr/bin/which("syft")
+syft := which("syft")
 
 # SUDO
 
 [private]
 SUDO_DISPLAY := env("DISPLAY", "") || env("WAYLAND_DISPLAY", "")
 [private]
-export SUDOIF := if `id -u` == "0" { "" } else if SUDO_DISPLAY != "" { /usr/bin/which("sudo") + " --askpass" } else { /usr/bin/which("sudo") }
+export SUDOIF := if `id -u` == "0" { "" } else if SUDO_DISPLAY != "" { which("sudo") + " --askpass" } else { which("sudo") }
 
 # Podman By Default
 
 [private]
-export PODMAN := env("PODMAN", "") || /usr/bin/which("podman") || require("podman-remote")
+export PODMAN := env("PODMAN", "") || which("podman") || require("podman-remote")
 
 # Utilities
 
