@@ -143,6 +143,7 @@ build-image image="bluefin":
 
     # Labels
     BUILD_ARGS+=(
+        "--inherit-labels=false"
         "--label" "org.opencontainers.image.description={{ repo_image_name }} is my OCI image built from ublue projects. It mainly extends them for my uses."
         "--label" "org.opencontainers.image.source=https://github.com/{{ repo_name }}/{{ repo_image_name }}"
         "--label" "org.opencontainers.image.title={{ repo_image_name }}"
