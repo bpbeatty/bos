@@ -9,9 +9,6 @@ repo_name := lowercase("bpbeatty")
 IMAGE_REGISTRY := "ghcr.io" / repo_name
 FQ_IMAGE_NAME := IMAGE_REGISTRY / repo_image_name
 
-# Check if podman exists using your shell's which command
-HAS_PODMAN := `which podman 2>/dev/null || true`
-
 # Images
 
 [private]
@@ -359,8 +356,8 @@ lint-recipes:
 # Login to GHCR
 [group('CI')]
 login-to-ghcr $user $token:
-    echo "$token" | {{ if HAS_PODMAN != "" { PODMAN + ' login ghcr.io -u "$user" --password-stdin' } else { 'docker login ghcr.io -u "$user" --password-stdin' } }}
-    {{ if HAS_PODMAN != "" { 'echo $token | ' + PODMAN + ' login ghcr.io -u "$user" --password-stdin --authfile ~/.docker/config.json' } else { '' } }}
+    echo "$token" | {{ if which("podman") != "" { PODMAN + ' login ghcr.io -u "$user" --password-stdin' } else { 'docker login ghcr.io -u "$user" --password-stdin' } }}
+    {{ if which("podman") != "" { 'echo $token | ' + PODMAN + ' login ghcr.io -u "$user" --password-stdin --authfile ~/.docker/config.json' } else { '' } }}
 
 # Push and Sign
 [group('CI')]
@@ -480,31 +477,29 @@ just := just_executable() + " -f " + justfile()
 [private]
 image-file := GIT_ROOT / "image-versions.yml"
 [private]
-yq := `which yq 2>/dev/null || true`
+yq := which("yq")
 [private]
-jq := `which jq 2>/dev/null || true`
+jq := which("jq")
 [private]
-skopeo := `which skopeo 2>/dev/null || true`
+skopeo := which("skopeo")
 [private]
-oras := `which oras 2>/dev/null || true`
+oras := which("oras")
 [private]
-cosign := `which cosign 2>/dev/null || true`
+cosign := which("cosign")
 [private]
-syft := `which syft 2>/dev/null || true`
-[private]
-SUDO_PATH := `which sudo 2>/dev/null || true`
+syft := which("syft")
 
 # SUDO
 
 [private]
-SUDO_DISPLAY := if env_var("DISPLAY") != "" { env_var("DISPLAY") } else if env_var("WAYLAND_DISPLAY") != "" { env_var("WAYLAND_DISPLAY") } else { "" }
+SUDO_DISPLAY := env("DISPLAY", "") || env("WAYLAND_DISPLAY", "")
 [private]
-export SUDOIF := if `id -u` == "0" { "" } else if SUDO_DISPLAY != "" { SUDO_PATH + " --askpass" } else { SUDO_PATH }
+export SUDOIF := if `id -u` == "0" { "" } else if SUDO_DISPLAY != "" { which("sudo") + " --askpass" } else { which("sudo") }
 
 # Podman By Default
 
 [private]
-export PODMAN := env("PODMAN", "") || HAS_PODMAN || require("podman-remote")
+export PODMAN := env("PODMAN", "") || which("podman") || require("podman-remote")
 
 # Utilities
 
