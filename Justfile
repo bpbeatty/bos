@@ -143,6 +143,7 @@ build-image image="bluefin":
 
     # Labels
     BUILD_ARGS+=(
+        "--inherit-labels=false"
         "--label" "org.opencontainers.image.description={{ repo_image_name }} is my OCI image built from ublue projects. It mainly extends them for my uses."
         "--label" "org.opencontainers.image.source=https://github.com/{{ repo_name }}/{{ repo_image_name }}"
         "--label" "org.opencontainers.image.title={{ repo_image_name }}"
@@ -355,8 +356,7 @@ lint-recipes:
 # Login to GHCR
 [group('CI')]
 login-to-ghcr $user $token:
-    echo "$token" | {{ if which("podman") != "" { PODMAN + ' login ghcr.io -u "$user" --password-stdin' } else { 'docker login ghcr.io -u "$user" --password-stdin' } }}
-    {{ if which("podman") != "" { 'echo $token | ' + PODMAN + ' login ghcr.io -u "$user" --password-stdin --authfile ~/.docker/config.json' } else { '' } }}
+    echo "$token" | {{ PODMAN + ' login ghcr.io -u "$user" --password-stdin' }}
 
 # Push and Sign
 [group('CI')]
@@ -476,29 +476,27 @@ just := just_executable() + " -f " + justfile()
 [private]
 image-file := GIT_ROOT / "image-versions.yml"
 [private]
-yq := which("yq")
+yq := `which yq 2>/dev/null || true`
 [private]
-jq := which("jq")
+jq := `which jq 2>/dev/null || true`
 [private]
-skopeo := which("skopeo")
+skopeo := `which skopeo 2>/dev/null || true`
 [private]
-oras := which("oras")
+oras := `which oras 2>/dev/null || true`
 [private]
-cosign := which("cosign")
+cosign := `which cosign 2>/dev/null || true`
 [private]
-syft := which("syft")
+syft := `which syft 2>/dev/null || true`
 
 # SUDO
 
 [private]
-SUDO_DISPLAY := env("DISPLAY", "") || env("WAYLAND_DISPLAY", "")
-[private]
-export SUDOIF := if `id -u` == "0" { "" } else if SUDO_DISPLAY != "" { which("sudo") + " --askpass" } else { which("sudo") }
+export SUDOIF := if `id -u` == "0" { "" } else { "sudo" }
 
 # Podman By Default
 
 [private]
-export PODMAN := env("PODMAN", "") || which("podman") || require("podman-remote")
+export PODMAN := if path_exists("/usr/bin/podman") == "true" { env("PODMAN", "/usr/bin/podman") } else if path_exists("/usr/bin/docker") == "true" { env("PODMAN", "docker") } else { env("PODMAN", "exit 1 ; ") }
 
 # Utilities
 
