@@ -491,8 +491,6 @@ syft := `which syft 2>/dev/null || true`
 # SUDO
 
 [private]
-SUDO_DISPLAY := env("DISPLAY", "") || env("WAYLAND_DISPLAY", "")
-[private]
 export SUDOIF := if `id -u` == "0" { "" } else { "sudo" }
 
 # Podman By Default
