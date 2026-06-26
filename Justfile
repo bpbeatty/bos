@@ -1,5 +1,4 @@
 set unstable
-set lists := true
 
 mod? titanoboa
 
@@ -9,6 +8,9 @@ repo_image_name := lowercase("bos")
 repo_name := lowercase("bpbeatty")
 IMAGE_REGISTRY := "ghcr.io" / repo_name
 FQ_IMAGE_NAME := IMAGE_REGISTRY / repo_image_name
+
+# Check if podman exists using your shell's which command
+HAS_PODMAN := `which podman 2>/dev/null || true`
 
 # Images
 
@@ -357,8 +359,8 @@ lint-recipes:
 # Login to GHCR
 [group('CI')]
 login-to-ghcr $user $token:
-    echo "$token" | {{ if which("podman") != "" { PODMAN + ' login ghcr.io -u "$user" --password-stdin' } else { 'docker login ghcr.io -u "$user" --password-stdin' } }}
-    {{ if which("podman") != "" { 'echo $token | ' + PODMAN + ' login ghcr.io -u "$user" --password-stdin --authfile ~/.docker/config.json' } else { '' } }}
+    echo "$token" | {{ if HAS_PODMAN != "" { PODMAN + ' login ghcr.io -u "$user" --password-stdin' } else { 'docker login ghcr.io -u "$user" --password-stdin' } }}
+    {{ if HAS_PODMAN != "" { 'echo $token | ' + PODMAN + ' login ghcr.io -u "$user" --password-stdin --authfile ~/.docker/config.json' } else { '' } }}
 
 # Push and Sign
 [group('CI')]
@@ -500,7 +502,7 @@ export SUDOIF := if `id -u` == "0" { "" } else if SUDO_DISPLAY != "" { which("su
 # Podman By Default
 
 [private]
-export PODMAN := env("PODMAN", "") || which("podman") || require("podman-remote")
+export PODMAN := env("PODMAN", "") || HAS_PODMAN || require("podman-remote")
 
 # Utilities
 
