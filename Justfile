@@ -1,5 +1,4 @@
-set unstable := true
-set lists := true
+set unstable
 
 mod? titanoboa
 
@@ -478,29 +477,29 @@ just := just_executable() + " -f " + justfile()
 [private]
 image-file := GIT_ROOT / "image-versions.yml"
 [private]
-yq := which("yq")
+yq := `which yq 2>/dev/null || true`
 [private]
-jq := which("jq")
+jq := `which jq 2>/dev/null || true`
 [private]
-skopeo := which("skopeo")
+skopeo := `which skopeo 2>/dev/null || true`
 [private]
-oras := which("oras")
+oras := `which oras 2>/dev/null || true`
 [private]
-cosign := which("cosign")
+cosign := `which cosign 2>/dev/null || true`
 [private]
-syft := which("syft")
+syft := `which syft 2>/dev/null || true`
 
 # SUDO
 
 [private]
 SUDO_DISPLAY := env("DISPLAY", "") || env("WAYLAND_DISPLAY", "")
 [private]
-export SUDOIF := if `id -u` == "0" { "" } else if SUDO_DISPLAY != "" { which("sudo") + " --askpass" } else { which("sudo") }
+export SUDOIF := if `id -u` == "0" { "" } else { "sudo" }
 
 # Podman By Default
 
 [private]
-export PODMAN := env("PODMAN", "") || which("podman") || require("podman-remote")
+export PODMAN := if path_exists("/usr/bin/podman") == "true" { env("PODMAN", "/usr/bin/podman") } else if path_exists("/usr/bin/docker") == "true" { env("PODMAN", "docker") } else { env("PODMAN", "exit 1 ; ") }
 
 # Utilities
 
