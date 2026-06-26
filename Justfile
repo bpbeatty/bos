@@ -480,17 +480,17 @@ just := just_executable() + " -f " + justfile()
 [private]
 image-file := GIT_ROOT / "image-versions.yml"
 [private]
-yq := which("yq")
+yq := `which yq 2>/dev/null || true`
 [private]
-jq := which("jq")
+jq := `which jq 2>/dev/null || true`
 [private]
-skopeo := which("skopeo")
+skopeo := `which skopeo 2>/dev/null || true`
 [private]
-oras := which("oras")
+oras := `which oras 2>/dev/null || true`
 [private]
-cosign := which("cosign")
+cosign := `which cosign 2>/dev/null || true`
 [private]
-syft := which("syft")
+syft := `which syft 2>/dev/null || true`
 
 # SUDO
 
