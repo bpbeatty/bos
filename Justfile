@@ -1,4 +1,5 @@
-set unstable
+set unstable := true
+set lists := true
 
 mod? titanoboa
 
