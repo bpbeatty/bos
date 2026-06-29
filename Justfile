@@ -356,7 +356,8 @@ lint-recipes:
 # Login to GHCR
 [group('CI')]
 login-to-ghcr $user $token:
-    echo "$token" | {{ PODMAN + ' login ghcr.io -u "$user" --password-stdin' }}
+    echo "$token" | {{ if PODMAN != "" { PODMAN + ' login ghcr.io -u "$user" --password-stdin' } else { 'docker login ghcr.io -u "$user" --password-stdin' } }}
+    {{ if PODMAN != "" { 'echo $token | ' + PODMAN + ' login ghcr.io -u "$user" --password-stdin --authfile ~/.docker/config.json' } else { '' } }}
 
 # Push and Sign
 [group('CI')]
