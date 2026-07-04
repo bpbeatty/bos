@@ -5,20 +5,20 @@ images:
   - name: akmods-stable
     image: ghcr.io/ublue-os/akmods
     tag: coreos-stable-43
-    digest: sha256:cd6e1e366cc4238993f01a818104b53be7ad797438cab746d734dd9218207779
+    digest: sha256:becd4fc961a6503ca12bbffcfd353e4d95d4c62f609ef2cdc968a96c5ed1c99b
   - name: akmods-nvidia-open-stable
     image: ghcr.io/ublue-os/akmods-nvidia-open
     tag: coreos-stable-43
-    digest: sha256:e49823d809cd4569810106ce9516d9cc5d4ac060e0449e9cb37b9106a27767f2
+    digest: sha256:5b3fbc2d43d91532f186472667d4525c06ba7ff6d2395befb61128617282d30c
   - name: akmods-zfs-stable
     image: ghcr.io/ublue-os/akmods-zfs
     tag: coreos-stable-43
-    digest: sha256:c49be6e03e8aada5943226b5b8917aedd8302af1749d2da46e968c08a274ee09
+    digest: sha256:cab26e30bfd41bc7d56a0a283203165ba492c6feacf92437b2fa9fb117afeb76
 
   - name: base-43
     image: ghcr.io/ublue-os/base-main
     tag: 43
-    digest: sha256:66f18160e1b74f85f90400b32a8c8fec12c91630800f4efa229cd49ed313bcbe
+    digest: sha256:5d0c524414437e6b991789d197d82bd0364b4e5b9ae93f6c4dad0be9a9031c6e
   # Bazzite
   - name: bazzite-gnome
     image: ghcr.io/ublue-os/bazzite-gnome
@@ -29,22 +29,22 @@ images:
   - name: bluefin
     image: ghcr.io/ublue-os/bluefin
     tag: stable-daily
-    digest: sha256:3d03a4ccab85e0b4c24e6d99fdd9907f6ec4346137c4d2c0903116bdd6ed4577
+    digest: sha256:3dc514725e9af6d4c9d3e030af269ee2beeb1428e3674d44b03fcff4972e0c3b
 
   - name: bluefin-dx
     image: ghcr.io/ublue-os/bluefin-dx
     tag: stable-daily
-    digest: sha256:ce30f4f590fa63d8597ca2feb08ede8199bd4ed521842cebdd10486b03f22c11
+    digest: sha256:6675e5aa74ce872b0288cf9e77078ae5ecca4d85879f75444ee0ff66a9ca5e88
 
   - name: bluefin-nvidia
     image: ghcr.io/ublue-os/bluefin-nvidia-open
     tag: stable-daily
-    digest: sha256:adfd51f203f6a585fe0a4bd4bd408e4f1b5ba77d085670cc5f36eab04b1d8b4f
+    digest: sha256:63aaee2a18fdcd3907c765b7f52f73a72396b4d803f9b6a73f4e8b2392a1fa93
 
   - name: bluefin-dx-nvidia
     image: ghcr.io/ublue-os/bluefin-dx-nvidia-open
     tag: stable-daily
-    digest: sha256:0b1b2442297c32f107b9aeb0aab3178456ab2c95c596b6d0f6665c6a15de8df4
+    digest: sha256:413f02cbefddaaef1bd6e40efe4e6dcdac19e2f0fcb0498d7592dd8144ced99d
 
   # Brew
   - name: brew
