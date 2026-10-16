@@ -40,7 +40,7 @@ cat <<<"$(jq ".\"image-name\" |= \"bos\" |
               .\"image-flavor\" |= \"${image_flavor}\" |
               .\"image-vendor\" |= \"bpbeatty\" |
               .\"image-ref\" |= \"ostree-image-signed:docker://ghcr.io/bpbeatty/bos\" |
-              .\"image-tag\" |= \"${IMAGE}${BETA:-}\" |
+              .\"image-tag\" |= \"${IMAGE}\" |
               .\"base-image-name\" |= \"${base_image}\" |
               .\"fedora-version\" |= \"$(rpm -E %fedora)\"" \
     </usr/share/ublue-os/image-info.json)" \
