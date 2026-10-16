@@ -9,7 +9,7 @@ Environment=SHELL=%s
 Environment=HOME=%h
 Environment=container=podman
 Exec=--verbose --name %u --user %U --group %G --home %h --init "0" --nvidia "1" -- " "
-Image=ghcr.io/bpbeatty/boxkit:latest
+Image=ghcr.io/bpbeatty/boxkit:latest@sha256:9d8b8ca7086b309cf4b5a7b6c11ba10304ad8befe1ab7c4cd66fa8fc5a82dde0
 HostName=boxkit.%l
 Label=manager=distrobox
 Network=host
