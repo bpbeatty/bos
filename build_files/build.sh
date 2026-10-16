@@ -18,7 +18,13 @@ rsync -rvK /ctx/usr /
 
 /ctx/base-image-changes.sh
 
-#### Example for enabling a System Unit File
+# rebuild static initramfs for the embedded kernel (if Clevis/modules changed)
+KVER=$(ls /usr/lib/modules 2>/dev/null | head -n1 || true)
+if [[ -n "$KVER" ]]; then
+    echo "::group::Regenerating static initramfs for kernel $KVER"
+    dracut --force --kver "$KVER"
+    echo "::endgroup::"
+fi
 
 # systemctl enable podman.socket
 systemctl enable remote-fs.target
