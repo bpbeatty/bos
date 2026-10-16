@@ -26,12 +26,14 @@ SERVER_PACKAGES=(
     yq
 )
 
-# ROCm Packages
+# printer packages
 SERVER_PACKAGES+=(
-    rocm-clinfo
-    rocm-hip
-    rocm-opencl
-    rocm-smi
+    avahi
+    cups
+    cups-filters
+    cups-ipp-utils
+    ipp-usb
+    nss-mdns
 )
 
 REMOVE_PACKAGES=(
@@ -49,16 +51,13 @@ REMOVE_PACKAGES=(
   ublue-os-signing
 )
 
-dnf5 remove -y "${REMOVE_PACKAGES[@]}"
+dnf5 remove -y --skip-unavailable "${REMOVE_PACKAGES[@]}" || true
 
-dnf5 install -y "${SERVER_PACKAGES[@]}"
+dnf5 install -y --skip-unavailable --allowerasing "${SERVER_PACKAGES[@]}"
 
 # The superior default editor
-dnf5 swap -y \
-    nano-default-editor vim-default-editor
-
-# dnf5 -y remove bluefin-plymouth
-dnf5 -y swap generic-logos fedora-logos
+dnf5 swap -y --skip-unavailable nano-default-editor vim-default-editor || true
+dnf5 swap -y --skip-unavailable generic-logos fedora-logos || true
 
 dnf5 install -y /tmp/rpms/config/bpbeatty-signing*.rpm
 

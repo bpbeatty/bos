@@ -8,13 +8,9 @@ echo "::group:: ===$(basename "$0")==="
 rsync -rvK /ctx/etc /
 rsync -rvK /ctx/usr /
 
-/ctx/remove-cliwrap.sh
+/ctx/server-packages.sh
 
 /ctx/branding.sh
-
-/ctx/composefs.sh
-
-/ctx/server-packages.sh
 
 /ctx/desktop-changes.sh
 
