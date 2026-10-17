@@ -15,7 +15,7 @@ fi
 
 # Append core system flatpaks
 cat >> "$SYS_FILE" <<'EOF'
-echo 'flatpak "com.discordapp.Discord"
+flatpak "com.discordapp.Discord"
 flatpak "com.getpostman.Postman"
 flatpak "com.heroicgameslauncher.hgl"
 flatpak "com.jeffser.Alpaca"
