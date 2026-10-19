@@ -25,13 +25,28 @@ RUN --mount=type=bind,from=ctx,src=/,target=/ctx \
 RUN --mount=type=bind,from=ctx,src=/,dst=/ctx \
     ["/ctx/cleanup.sh"]
 
-# rebuild static initramfs for the embedded kernel (if Clevis/modules changed)
+# force dracut to always include network capabilities and clevis
+RUN mkdir -p /etc/dracut.conf.d && \
+    echo 'add_dracutmodules+=" network clevis "' > /etc/dracut.conf.d/clevis.conf
+
+# run the dracut compilation loop with the /root symlink
 RUN KVER=$(ls /usr/lib/modules 2>/dev/null | head -n1 || true) && \
     if [ -n "$KVER" ]; then \
+        echo "Applying dracut symlink workaround..." && \
+        ORIG_LINK=$(readlink /root) && \
+        rm -f /root && mkdir /root && \
+        \
         echo "Regenerating static initramfs for kernel $KVER" && \
         dracut --force --kver "$KVER"; \
+        DRACUT_STATUS=$?; \
+        \
+        rm -rf /root && ln -s "$ORIG_LINK" /root && \
+        if [ $DRACUT_STATUS -ne 0 ]; then \
+            exit $DRACUT_STATUS; \
+        fi \
     fi
 
+# inform bootc to append kernel arguments to the physical bootloader
 RUN mkdir -p /usr/lib/bootc/kargs.d && \
     echo 'kargs = ["rd.neednet=1"]' > /usr/lib/bootc/kargs.d/01-clevis-net.toml
 
