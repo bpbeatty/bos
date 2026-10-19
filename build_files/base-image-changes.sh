@@ -45,4 +45,7 @@ sort -u -o "$SYS_FILE" "$SYS_FILE"
 echo 'flatpak "com.flashforge.FlashPrint"' >> "$DX_FILE"
 sort -u -o "$DX_FILE" "$DX_FILE"
 
+# update ca-trust
+update-ca-trust
+
 echo "::endgroup::"
