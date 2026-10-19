@@ -5,15 +5,15 @@ images:
   - name: akmods-stable
     image: ghcr.io/ublue-os/akmods
     tag: coreos-stable-43
-    digest: sha256:b7bcb76d179c18d35c0c34135c842d141654030fd27bed57bd76c10aa1c5dcca
+    digest: sha256:f4bd683b3652479f9e5106682ce9b58c35a45bf5bbc0efd9705a034e8b1b2ac7
   - name: akmods-nvidia-open-stable
     image: ghcr.io/ublue-os/akmods-nvidia-open
     tag: coreos-stable-43
-    digest: sha256:96a4c2fe83b22ab9b4909815275d833fde74f59faa821813c79197b7e1d2b0c7
+    digest: sha256:e22fbcda1c0a52b4017970b3959585d692e3d05698ed7074f96d0ad4bdeefd17
   - name: akmods-zfs-stable
     image: ghcr.io/ublue-os/akmods-zfs
     tag: coreos-stable-43
-    digest: sha256:4229392dc4ef6a09bd5e5f3b3d0527f9f0fb17174401fb0cc16c3bdd62697919
+    digest: sha256:79109064fffd6aeb1e0306c1d819f502bc8e72c22b6bcb1429245a5083e09c11
 
   - name: base-43
     image: ghcr.io/ublue-os/base-main
@@ -50,7 +50,7 @@ images:
   - name: brew
     image: ghcr.io/ublue-os/brew
     tag: latest
-    digest: sha256:5bdf54dc7c21c22db29df6550e3711788719c5123549ea6dc5645d5af47795e3
+    digest: sha256:393b567da078f0f0638450c388e229011dae06f94a90017cb7525b57d9faa46e
 
   # Common
   - name: common
