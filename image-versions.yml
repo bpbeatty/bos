@@ -5,15 +5,15 @@ images:
   - name: akmods-stable
     image: ghcr.io/ublue-os/akmods
     tag: coreos-stable-43
-    digest: sha256:415038ca0c549381d911783877b93c4987bf1aad5f48c17982232c3331c388dd
+    digest: sha256:27496c4d2bf1b310c5008a3445c7d0d4e8f483187ec64f17d5293274c3d6c06c
   - name: akmods-nvidia-open-stable
     image: ghcr.io/ublue-os/akmods-nvidia-open
     tag: coreos-stable-43
-    digest: sha256:6bde6bab761de02bd1f55f73cf2a66205aae0daf5ee3a3ce5dd9edf99635f93a
+    digest: sha256:3552d39cd7e1687f969371ccbe53f092d98efc1928ae7db51d859e80433e69b1
   - name: akmods-zfs-stable
     image: ghcr.io/ublue-os/akmods-zfs
     tag: coreos-stable-43
-    digest: sha256:4463d1daf87be5aa56cb3e916cbfe85ec7e12bf632c44090d52f4a08079a99c8
+    digest: sha256:54c8fc86890de69871f12f1b626ce3d386b31891410f8ad693312c6c4ae02ccf
 
   - name: base-43
     image: ghcr.io/ublue-os/base-main
@@ -29,28 +29,28 @@ images:
   - name: bluefin
     image: ghcr.io/ublue-os/bluefin
     tag: stable-daily
-    digest: sha256:46ad2d6e69498517c8734be5872b928a30c7cedf505b46b18ac002d82f35e9eb
+    digest: sha256:183161111a2de95fdc9b1fc125806ad9d804ced3a698e5495f4f8868f8f4504e
 
   - name: bluefin-dx
     image: ghcr.io/ublue-os/bluefin-dx
     tag: stable-daily
-    digest: sha256:1f6594cf4834b8cbd621c6d4302c7f4481b9d3c876d3fa4838d83dc7576e1c14
+    digest: sha256:828f984500b001d9d2b53f257b8ba9faec8d90ae1409c7e4428db26ab0cc9908
 
   - name: bluefin-nvidia
     image: ghcr.io/ublue-os/bluefin-nvidia-open
     tag: stable-daily
-    digest: sha256:cfbe51d6f4e969bad6ab6b67866a85d389d8abe8e3029a9ae78f100d4d458115
+    digest: sha256:859d6cd23354873e865b7fbdcebe72a6b0db909d4035c705893d33304801af41
 
   - name: bluefin-dx-nvidia
     image: ghcr.io/ublue-os/bluefin-dx-nvidia-open
     tag: stable-daily
-    digest: sha256:f91341a71615b606414dc72c5c76415ccde8bb8928c114d9bbdaac17198e54cd
+    digest: sha256:0d7e2136a858ac4577201426d56d4818d00d07aa3d52d08443adf082f890f49d
 
   # Brew
   - name: brew
     image: ghcr.io/ublue-os/brew
     tag: latest
-    digest: sha256:393b567da078f0f0638450c388e229011dae06f94a90017cb7525b57d9faa46e
+    digest: sha256:c201bc801e4828849e8e36c4adcb5c0f38d35ac3ff9546a0ecab0fd2beabf51f
 
   # Common
   - name: common
