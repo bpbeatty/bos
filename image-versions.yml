@@ -64,7 +64,7 @@ images:
   - name: common
     image: ghcr.io/projectbluefin/common
     tag: latest
-    digest: sha256:6860d52648441d4a490942542e23cd443add64ecf689150dd3ea047c688eab83
+    digest: sha256:5b28d45dbf60a3af708b34ef38670995003d296ab57acfcc59171c72d7c25023
 
   # Chunkah
   - name: chunkah
