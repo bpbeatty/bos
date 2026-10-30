@@ -33,6 +33,8 @@ RUN mkdir -p /etc/dracut.conf.d && \
 RUN mkdir -p /usr/lib/bootc/kargs.d && \
     echo 'kargs = ["rd.neednet=1"]' > /usr/lib/bootc/kargs.d/01-clevis-net.toml
 
+RUN dracut -f --regenerate-all
+
 ### LINTING
 ## Verify final image and contents are correct.
 RUN bootc container lint
