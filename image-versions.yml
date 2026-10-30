@@ -4,21 +4,29 @@ images:
   # Stable
   - name: akmods-stable
     image: ghcr.io/ublue-os/akmods
-    tag: coreos-stable-43
-    digest: sha256:39ae18d481e15003e44ee8df9dfe0702a736ab6cb3b4d5ea9b288945c2d74bfa
+    tag: coreos-stable-44
+    digest: sha256:47f77083079b3c4ea9c4d7189d2b06c7101998a1d608e9f21c0b132c83786ab8
   - name: akmods-nvidia-open-stable
     image: ghcr.io/ublue-os/akmods-nvidia-open
-    tag: coreos-stable-43
-    digest: sha256:fba9f135fffc55cb3ff6368635d494254b85e24f0ed147eb7a46be2fcbe1f02d
+    tag: coreos-stable-44
+    digest: sha256:59129793c3160bf0abfaea281f15729a606abd7c21013e733acae829cd402dc8
   - name: akmods-zfs-stable
     image: ghcr.io/ublue-os/akmods-zfs
-    tag: coreos-stable-43
-    digest: sha256:17da73361f5b48796ce49226e9796a5e50284746cbda11a6798496b9aa5ec00a
+    tag: coreos-stable-44
+    digest: sha256:90c237d0b46f0dcbafe57fdc179f3ff7f5111236148a2355bf848878d41f5cde
 
+  # Fedora 43
   - name: base-43
     image: ghcr.io/ublue-os/base-main
     tag: 43
     digest: sha256:985d599cec7dc38d61fc3fbc930fc9a0bae58de7523ba405480c0f0ffd1dd857
+
+  # Fedora 44
+  - name: base-44
+    image: ghcr.io/ublue-os/base-main
+    tag: 44
+    digest: sha256:d926d8d4020cdc721360a451050808306d684edc0f08cc7dbd8bcd80e899bf8b
+
   # Bazzite
   - name: bazzite-gnome
     image: ghcr.io/ublue-os/bazzite-gnome
@@ -29,7 +37,7 @@ images:
   - name: bluefin
     image: ghcr.io/ublue-os/bluefin
     tag: stable-daily
-    digest: sha256:60f302cf95d422a46a961769a1918b08cccfc24a27b22111ad8afcabfb5ad400
+    digest: sha256:afe335088014cf0c20257c64d81a474ff683c9e6796a633ea8ebadee428d26e9
 
   - name: bluefin-dx
     image: ghcr.io/ublue-os/bluefin-dx
@@ -61,8 +69,8 @@ images:
   # Chunkah
   - name: chunkah
     image: quay.io/coreos/chunkah
-    tag: v0.7.1
-    digest: sha256:71e593421c5de7dcc7c8c5c50e98d3bac572055a76f399f61a491d123c20a523
+    tag: dev
+    digest: sha256:9d309a7ebace606d6d3e240c4985cbf8276f032afd9c8eb000b70e8424257461
 
   # QEMU
   - name: qemu
