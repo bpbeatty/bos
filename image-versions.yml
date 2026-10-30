@@ -70,7 +70,7 @@ images:
   - name: chunkah
     image: quay.io/coreos/chunkah
     tag: dev
-    digest: sha256:9d309a7ebace606d6d3e240c4985cbf8276f032afd9c8eb000b70e8424257461
+    digest: sha256:5538de8ec5563b27ec2f382b6ecdd91cc0ebcd500cf7111cf09ea408b6722384
 
   # QEMU
   - name: qemu
