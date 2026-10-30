@@ -1,5 +1,5 @@
 ARG BASE_IMAGE="ghcr.io/ublue-os/bluefin"
-ARG TAG_VERSION="stable"
+ARG TAG_VERSION="stable-daily"
 
 FROM ghcr.io/bpbeatty/config:latest as config
 FROM scratch AS ctx
