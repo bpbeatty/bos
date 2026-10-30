@@ -25,13 +25,17 @@ RUN --mount=type=bind,from=ctx,src=/,target=/ctx \
 RUN --mount=type=bind,from=ctx,src=/,dst=/ctx \
     ["/ctx/cleanup.sh"]
 
-# force dracut to always include network capabilities and clevis
-RUN mkdir -p /etc/dracut.conf.d && \
-    echo 'add_dracutmodules+=" network clevis "' > /etc/dracut.conf.d/clevis.conf
-
 # inform bootc to append kernel arguments to the physical bootloader
 RUN mkdir -p /usr/lib/bootc/kargs.d && \
     echo 'kargs = ["rd.neednet=1"]' > /usr/lib/bootc/kargs.d/01-clevis-net.toml
+
+RUN mkdir -p /usr/lib/dracut/dracut.conf.d && \
+    echo 'add_dracutmodules+=" network clevis "' > /usr/lib/dracut/dracut.conf.d/clevis.conf
+
+RUN set -xe; kver=$(ls /usr/lib/modules); \
+    env DRACUT_NO_XATTR=1 dracut -f "/usr/lib/modules/${kver}/initramfs.img" "$kver"
+
+RUN lsinitrd | grep clevis
 
 ### LINTING
 ## Verify final image and contents are correct.
