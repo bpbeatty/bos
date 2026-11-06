@@ -32,16 +32,15 @@ RUN mkdir -p /usr/lib/bootc/kargs.d && \
 RUN mkdir -p /usr/lib/dracut/dracut.conf.d && \
     echo 'add_dracutmodules+=" network clevis "' > /usr/lib/dracut/dracut.conf.d/clevis.conf
 
-# Enforce dracut to build network and clevis, and force regeneration safely
+# rebuild the initramfs using the generic mode to bypass container environment bugs
 RUN set -xe; \
-    # Safely grab exactly one active kernel version
     kver=$(ls -1 /usr/lib/modules | head -n 1); \
     echo "Building initramfs for kernel: ${kver}"; \
     \
-    # Execute dracut without xattr, targeting the explicit image path
-    env DRACUT_NO_XATTR=1 dracut --force "/usr/lib/modules/${kver}/initramfs.img" "${kver}"; \
+    # Enforce non-hostonly mode (--no-hostonly) to prevent it pulling local container paths like /root
+    env DRACUT_NO_XATTR=1 dracut --force --no-hostonly "/usr/lib/modules/${kver}/initramfs.img" "${kver}"; \
     \
-    # Optional verification line
+    # Verify the modules are actually baked in
     lsinitrd "/usr/lib/modules/${kver}/initramfs.img" | grep -E "clevis|network"
 
 
