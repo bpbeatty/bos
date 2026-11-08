@@ -25,7 +25,7 @@ images:
   - name: base-44
     image: ghcr.io/ublue-os/base-main
     tag: 44
-    digest: sha256:37a727b9e5623181864274f16b295fef9fb6a507bcc3c8ac60d4f68fc798e144
+    digest: sha256:59d5f271b40ed6ebf94cc22f20d338d92a116423aec52d326bc55cefde3172a6
 
   # Bazzite
   - name: bazzite-gnome
