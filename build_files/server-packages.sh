@@ -110,3 +110,5 @@ set-option -g status-style bg=default
 set-option -g status-style fg=colour240
 set -g status-right '|%Y-%m-%d %H:%M|'
 EOF
+
+echo "::endgroup::"

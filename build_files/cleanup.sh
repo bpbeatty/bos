@@ -60,3 +60,5 @@ rm -rf /boot/*
 rm -rf /usr/etc
 mkdir -p /tmp
 mkdir -p /var/tmp && chmod -R 1777 /var/tmp
+
+echo "::endgroup::"

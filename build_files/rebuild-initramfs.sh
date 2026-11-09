@@ -10,3 +10,5 @@ kver=$(cd /usr/lib/modules && echo *)
 HOME=/root dracut --no-hostonly --force \
     --kver "$kver" --reproducible --zstd -v -f "/usr/lib/modules/$kver/initramfs.img"
 chmod 0600 "/usr/lib/modules/$kver/initramfs.img"
+
+echo "::endgroup::"

@@ -22,26 +22,6 @@ RUN --mount=type=bind,from=ctx,src=/,target=/ctx \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build.sh
 
-RUN --mount=type=bind,from=ctx,src=/,dst=/ctx \
-    ["/ctx/rebuild-initramfs.sh"]
-
-# RUN mkdir -p /usr/lib/bootc/kargs.d && \
-#     echo 'kargs = ["rd.neednet=1"]' > /usr/lib/bootc/kargs.d/01-clevis-net.toml
-# 
-# RUN mkdir -p /usr/lib/dracut/dracut.conf.d && \
-#     echo 'add_dracutmodules+=" network clevis "' > /usr/lib/dracut/dracut.conf.d/clevis.conf
-# 
-# # Force Dracut to rebuild the initramfs in the correct bootc module path
-# RUN set -x && \
-#     kver=$(cd /usr/lib/modules && echo *) && \
-#     HOME=/root dracut --no-hostonly --force --add "ostree network clevis" \
-#       --kver "$kver" --reproducible --zstd -v -f "/usr/lib/modules/$kver/initramfs.img" && \
-#     chmod 0600 "/usr/lib/modules/$kver/initramfs.img"
- 
-# Verify the modules were included in the new initramfs
-# RUN kver=$(cd /usr/lib/modules && echo *) && \
-#     lsinitrd "/usr/lib/modules/$kver/initramfs.img" | grep -E "clevis|network"
-
 ### LINTING
 ## Verify final image and contents are correct.
 RUN bootc container lint

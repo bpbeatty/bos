@@ -57,3 +57,4 @@ sed -i "s|^OSTREE_VERSION=.*|OSTREE_VERSION=\'${VERSION}\'|" /usr/lib/os-release
 # echo "IMAGE_ID=\"${IMAGE}\"" >>/usr/lib/os-release
 # echo "IMAGE_VERSION=\"${VERSION}\"" >>/usr/lib/os-release
 
+echo "::endgroup::"
