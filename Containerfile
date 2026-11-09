@@ -32,10 +32,15 @@ RUN mkdir -p /usr/lib/bootc/kargs.d && \
 RUN mkdir -p /usr/lib/dracut/dracut.conf.d && \
     echo 'add_dracutmodules+=" network clevis "' > /usr/lib/dracut/dracut.conf.d/clevis.conf
 
-# Force Dracut to rebuild the initramfs with the new modules included
-RUN dracut --verbose --force --regenerate-all
+# Force Dracut to rebuild the initramfs in the correct bootc module path
+RUN set -x && \
+    kver=$(cd /usr/lib/modules && echo *) && \
+    dracut --no-hostonly --kver "$kver" --reproducible --zstd -v --add "network clevis" -f "/usr/lib/modules/$kver/initramfs.img" && \
+    chmod 0600 "/usr/lib/modules/$kver/initramfs.img"
 
-RUN lsinitrd | grep -E "clevis|network"
+# Verify the modules were included in the new initramfs
+RUN kver=$(cd /usr/lib/modules && echo *) && \
+    lsinitrd "/usr/lib/modules/$kver/initramfs.img" | grep -E "clevis|network"
 
 ### LINTING
 ## Verify final image and contents are correct.
