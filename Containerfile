@@ -34,7 +34,7 @@ RUN mkdir -p /usr/lib/dracut/dracut.conf.d && \
 
 # Force Dracut to rebuild the initramfs in the correct bootc module path
 RUN set -x && \
-    mkdir -m 0750 -p /root && \
+    mkdir -p /root && chmod 0750 /root && \
     kver=$(cd /usr/lib/modules && echo *) && \
     HOME=/root dracut --no-hostonly --force --add "ostree network clevis" --kver "$kver" --reproducible --zstd -v -f "/usr/lib/modules/$kver/initramfs.img" && \
     chmod 0600 "/usr/lib/modules/$kver/initramfs.img"
