@@ -55,10 +55,10 @@ done
 dnf5 clean all
 
 rm -rf /tmp/*
-rm -rf /var/*
+find /var -mindepth 1 -maxdepth 1 ! -name 'cache' ! -name 'log' ! -name 'tmp' -exec rm -rf {} +
 rm -rf /boot/*
 rm -rf /usr/etc
-ostree container commit
 mkdir -p /tmp
 mkdir -p /var/tmp && chmod -R 1777 /var/tmp
 
+echo "::endgroup::"

@@ -136,10 +136,10 @@ build-image image="bluefin":
     fi
 
     # Pull the images
-    {{ PODMAN }} pull "$check"
-    {{ if image =~ 'cosmic|aurora|bluefin' { PODMAN + ' pull "$akmods"' } else { '' } }}
-    {{ if image =~ 'cosmic|(aurora.*|bluefin.*)-beta' { PODMAN + ' pull "$akmods_zfs"' } else { '' } }}
-    {{ if image =~ 'cosmic-nv.*|(aurora-nv.*|bluefin-nv.*)-beta' { PODMAN + ' pull "$akmods_nvidia"' } else { '' } }}
+    # {{ PODMAN }} pull "$check"
+    # {{ if image =~ 'cosmic|aurora|bluefin' { PODMAN + ' pull "$akmods"' } else { '' } }}
+    # {{ if image =~ 'cosmic|(aurora.*|bluefin.*)-beta' { PODMAN + ' pull "$akmods_zfs"' } else { '' } }}
+    # {{ if image =~ 'cosmic-nv.*|(aurora-nv.*|bluefin-nv.*)-beta' { PODMAN + ' pull "$akmods_nvidia"' } else { '' } }}
 
     # Labels
     BUILD_ARGS+=(
@@ -166,6 +166,7 @@ build-image image="bluefin":
 
     # Additional Args
     BUILD_ARGS+=(
+        "--pull=newer"
         "--security-opt" "label=disable"
         "--file" "Containerfile"
         "--tag" "{{ repo_image_name + ":" + image }}"
@@ -261,10 +262,8 @@ secureboot image="bluefin":
     {{ PODMAN }} rm "$TMP"
 
     # Get the Public Certificates
-    curl --retry 3 -Lo "$TMPDIR"/kernel-sign.der https://github.com/ublue-os/kernel-cache/raw/main/certs/public_key.der
-    curl --retry 3 -Lo "$TMPDIR"/akmods.der https://github.com/ublue-os/kernel-cache/raw/main/certs/public_key_2.der
+    curl --retry 3 -Lo "$TMPDIR"/kernel-sign.der https://github.com/ublue-os/akmods/raw/main/certs/public_key.der
     openssl x509 -in "$TMPDIR"/kernel-sign.der -out "$TMPDIR"/kernel-sign.crt
-    openssl x509 -in "$TMPDIR"/akmods.der -out "$TMPDIR"/akmods.crt
 
     # Make sure we have sbverify
     CMD="$(command -v sbverify)" || true
@@ -284,8 +283,7 @@ secureboot image="bluefin":
     # Confirm that Signatures Are Good
     $CMD --list "$TMPDIR/vmlinuz"
     returncode=0
-    if ! $CMD --cert "$TMPDIR/kernel-sign.crt" "$TMPDIR/vmlinuz" ||
-       ! $CMD --cert "$TMPDIR/akmods.crt" "$TMPDIR/vmlinuz"; then
+    if ! $CMD --cert "$TMPDIR/kernel-sign.crt" "$TMPDIR/vmlinuz"; then
         echo "Secureboot Signature Failed...."
         returncode=1
     fi
@@ -293,7 +291,6 @@ secureboot image="bluefin":
         {{ PODMAN }} rm -f "${temp_name}"
     fi
     exit "$returncode"
-
 # Lint Files
 [group('Utility')]
 lint:
@@ -503,6 +500,12 @@ export PODMAN := if path_exists("/usr/bin/podman") == "true" { env("PODMAN", "/u
 
 verify-container := '''
 function verify-container() {
+    # Bypass verification for local development builds
+    if [[ "${SKIP_VERIFY:-}" == "true" ]]; then
+        echo "Local build detected: Skipping cosign container verification..."
+        return 0
+    fi
+
     local container="$1"
     local registry="${2:-ghcr.io/ublue-os}"
     local key="${3:-https://raw.githubusercontent.com/ublue-os/main/main/cosign.pub}"

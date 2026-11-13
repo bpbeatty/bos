@@ -16,20 +16,11 @@ ARG SET_X=""
 ARG VERSION="bos"
 
 RUN --mount=type=bind,from=ctx,src=/,target=/ctx \
-    --mount=type=bind,from=config,src=/rpms,dst=/tmp/rpms/config \
+    --mount=type=bind,from=config,src=/rpms,dst=/ctx/rpms/config \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build.sh
-
-RUN --mount=type=bind,from=ctx,src=/,dst=/ctx \
-    ["/ctx/cleanup.sh"]
-
-RUN mkdir -p /usr/lib/bootc/kargs.d && \
-    echo 'kargs = ["rd.neednet=1"]' > /usr/lib/bootc/kargs.d/01-clevis-net.toml
-
-RUN mkdir -p /usr/lib/dracut/dracut.conf.d && \
-    echo 'add_dracutmodules+=" network clevis "' > /usr/lib/dracut/dracut.conf.d/clevis.conf
 
 ### LINTING
 ## Verify final image and contents are correct.

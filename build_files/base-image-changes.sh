@@ -46,16 +46,6 @@ echo 'flatpak "com.flashforge.FlashPrint"' >> "$DX_FILE"
 sort -u -o "$DX_FILE" "$DX_FILE"
 
 # update ca-trust
-update-ca-trust
-
-# create the Firefox global policy directory and write the policies file
-mkdir -p /usr/lib64/firefox/distribution && \
-    tee /usr/lib64/firefox/distribution/policies.json << 'EOF'
-{
-  "policies": {
-    "ImportEnterpriseRoots": true
-  }
-}
-EOF
+update-ca-trust extract
 
 echo "::endgroup::"

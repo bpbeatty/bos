@@ -18,4 +18,8 @@ rsync -rvK /ctx/usr /
 
 /ctx/base-image-changes.sh
 
+/ctx/rebuild-initramfs.sh
+
+/ctx/cleanup.sh
+
 echo "::endgroup::"
