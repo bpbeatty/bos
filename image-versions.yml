@@ -37,22 +37,22 @@ images:
   - name: bluefin
     image: ghcr.io/ublue-os/bluefin
     tag: stable-daily
-    digest: sha256:3b8576612b6356000434d8ed1a3cf806f9bf7e9b2d03afadfa80ff2bb652bc02
+    digest: sha256:1be3600679c112996ffb12ab7af74c920eadda3968bc795357cb9e2c5a02df87
 
   - name: bluefin-dx
     image: ghcr.io/ublue-os/bluefin-dx
     tag: stable-daily
-    digest: sha256:75cb5c3e962eb23a6f8e2fc1a99a9ff35b45b80d2bdefa36d1b47b456b78113a
+    digest: sha256:e7ae920d3a04f078d3ee939a52b017329ffde222e0e1f01f5e019e112bbbc651
 
   - name: bluefin-nvidia
     image: ghcr.io/ublue-os/bluefin-nvidia-open
     tag: stable-daily
-    digest: sha256:6c4fe8708b5a7642996628f436b9ecd914ac1538d58e13d995d14ead2d6a6044
+    digest: sha256:35c3bd432d500d46f42124a24fbc5264899cb4c755ac92355c22ac2fa27cc483
 
   - name: bluefin-dx-nvidia
     image: ghcr.io/ublue-os/bluefin-dx-nvidia-open
     tag: stable-daily
-    digest: sha256:5034d84efeb1f2794a4c38423cb48cb18172ad63d3f7fd00854fa80d4970abfb
+    digest: sha256:b44250541cc59c478c889f2cbd1c02bd7a19d0cac66ecdf5123eb1723baf0da7
 
   # Brew
   - name: brew
