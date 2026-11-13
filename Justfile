@@ -136,10 +136,10 @@ build-image image="bluefin":
     fi
 
     # Pull the images
-    {{ PODMAN }} pull "$check"
-    {{ if image =~ 'cosmic|aurora|bluefin' { PODMAN + ' pull "$akmods"' } else { '' } }}
-    {{ if image =~ 'cosmic|(aurora.*|bluefin.*)-beta' { PODMAN + ' pull "$akmods_zfs"' } else { '' } }}
-    {{ if image =~ 'cosmic-nv.*|(aurora-nv.*|bluefin-nv.*)-beta' { PODMAN + ' pull "$akmods_nvidia"' } else { '' } }}
+    # {{ PODMAN }} pull "$check"
+    # {{ if image =~ 'cosmic|aurora|bluefin' { PODMAN + ' pull "$akmods"' } else { '' } }}
+    # {{ if image =~ 'cosmic|(aurora.*|bluefin.*)-beta' { PODMAN + ' pull "$akmods_zfs"' } else { '' } }}
+    # {{ if image =~ 'cosmic-nv.*|(aurora-nv.*|bluefin-nv.*)-beta' { PODMAN + ' pull "$akmods_nvidia"' } else { '' } }}
 
     # Labels
     BUILD_ARGS+=(
@@ -166,6 +166,7 @@ build-image image="bluefin":
 
     # Additional Args
     BUILD_ARGS+=(
+        "--pull=newer"
         "--security-opt" "label=disable"
         "--file" "Containerfile"
         "--tag" "{{ repo_image_name + ":" + image }}"
@@ -503,6 +504,12 @@ export PODMAN := if path_exists("/usr/bin/podman") == "true" { env("PODMAN", "/u
 
 verify-container := '''
 function verify-container() {
+    # Bypass verification for local development builds
+    if [[ "${SKIP_VERIFY:-}" == "true" ]]; then
+        echo "Local build detected: Skipping cosign container verification..."
+        return 0
+    fi
+
     local container="$1"
     local registry="${2:-ghcr.io/ublue-os}"
     local key="${3:-https://raw.githubusercontent.com/ublue-os/main/main/cosign.pub}"
