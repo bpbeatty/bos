@@ -37,12 +37,12 @@ images:
   - name: bluefin
     image: ghcr.io/ublue-os/bluefin
     tag: stable-daily
-    digest: sha256:1be3600679c112996ffb12ab7af74c920eadda3968bc795357cb9e2c5a02df87
+    digest: sha256:2dd11867b8138f102fa5c37f043c8cebbae209c98f6abaf8d68f543e053561fe
 
   - name: bluefin-dx
     image: ghcr.io/ublue-os/bluefin-dx
     tag: stable-daily
-    digest: sha256:e7ae920d3a04f078d3ee939a52b017329ffde222e0e1f01f5e019e112bbbc651
+    digest: sha256:4648851b7a7adf663fc8757dbad459ae5407bd29588ff1c6fc49c93c96c8d3d0
 
   - name: bluefin-nvidia
     image: ghcr.io/ublue-os/bluefin-nvidia-open
