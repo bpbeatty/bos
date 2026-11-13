@@ -60,7 +60,7 @@ dnf5 install -y --skip-unavailable --allowerasing "${SERVER_PACKAGES[@]}"
 dnf5 swap -y --skip-unavailable nano-default-editor vim-default-editor || true
 dnf5 swap -y --skip-unavailable generic-logos fedora-logos || true
 
-dnf5 install -y /tmp/rpms/config/bpbeatty-signing*.rpm
+dnf5 install -y /ctx/rpms/config/bpbeatty-signing*.rpm
 
 # TMUX config
 tee /etc/tmux.conf <<'EOF'
