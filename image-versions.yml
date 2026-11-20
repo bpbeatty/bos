@@ -5,15 +5,15 @@ images:
   - name: akmods-stable
     image: ghcr.io/ublue-os/akmods
     tag: coreos-stable-44
-    digest: sha256:850cd1b4fd8bf7fc4683e2d33464b26af4d4a6f2b8ca0eb89f834c3702275a2a
+    digest: sha256:691c91619f98351a576ce74d68959738ae53f76e03dbc0750d321b10d0471760
   - name: akmods-nvidia-open-stable
     image: ghcr.io/ublue-os/akmods-nvidia-open
     tag: coreos-stable-44
-    digest: sha256:469afa15900d125cede56ba2974ad570c474cfbdea24ec6787fa4fdece01731a
+    digest: sha256:8aef3f08f8cee47047c9fa8a15c018f14dd9fe478b6dfba239c6bda896254732
   - name: akmods-zfs-stable
     image: ghcr.io/ublue-os/akmods-zfs
     tag: coreos-stable-44
-    digest: sha256:bafaad14ea5a97a944d9f7494164e523a425645e6ad2a7297417cedf1d332ab9
+    digest: sha256:afee053de17c39154ea3f6358ee9f7ebb6505506afe54354109c5bb351230608
 
   # Fedora 43
   - name: base-43
@@ -25,7 +25,7 @@ images:
   - name: base-44
     image: ghcr.io/ublue-os/base-main
     tag: 44
-    digest: sha256:06e7707d5261d8b7e744b66c09cc9ccce2fe2f029068c76ff1102ac140c21b2c
+    digest: sha256:0dce5cd6b3d112dfa1f28f3eba1c3bef1896b7096edb3d6b3d0661849718bcb5
 
   # Bazzite
   - name: bazzite-gnome
@@ -37,22 +37,22 @@ images:
   - name: bluefin
     image: ghcr.io/ublue-os/bluefin
     tag: stable-daily
-    digest: sha256:dceea16742c1dbc0b9f437f916c43e91c554644528b921aed590cc92bd25a688
+    digest: sha256:d54e2b054431dce53f8682f5d38e76e62e9d2e19139268f96126b320289b425d
 
   - name: bluefin-dx
     image: ghcr.io/ublue-os/bluefin-dx
     tag: stable-daily
-    digest: sha256:8ac3535e4dba502f7fdbe8d20d8f73728edf02107c23e25786e68075def9d901
+    digest: sha256:c6829a8a910d2dea9c75bfa2f9702a0b9ff23b8bcd7e488b4da0d8f94df63260
 
   - name: bluefin-nvidia
     image: ghcr.io/ublue-os/bluefin-nvidia-open
     tag: stable-daily
-    digest: sha256:354f152ed21aa8e276b23940df544bd9399973cfe620f7f5bb8ace73db8ae9fa
+    digest: sha256:7b0346e4bedbb4fadaab23ff554ca586f5f653420b9c529c59ea2b8a9d5032ae
 
   - name: bluefin-dx-nvidia
     image: ghcr.io/ublue-os/bluefin-dx-nvidia-open
     tag: stable-daily
-    digest: sha256:78465cde2839ac2765497ed6888fdb990e2a2c9f052ee1486b59322c6c7fec1e
+    digest: sha256:2c790e972feb7deb2a705996f7ab807ccb19744f22e95a502bed50751876371f
 
   # Brew
   - name: brew
