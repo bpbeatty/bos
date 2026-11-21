@@ -5,15 +5,15 @@ images:
   - name: akmods-stable
     image: ghcr.io/ublue-os/akmods
     tag: coreos-stable-44
-    digest: sha256:3254ccdbf8a87dff01713485df6602a13f2d4d7623b6ca245c4823fc086cb713
+    digest: sha256:a97525668df8637ae4d92a6e0b45cba741f18c04cf033a006ebaaa2ff84fb493
   - name: akmods-nvidia-open-stable
     image: ghcr.io/ublue-os/akmods-nvidia-open
     tag: coreos-stable-44
-    digest: sha256:8354e501449a8ed8271ead5ae7acc114cde9163fdb9738076fdeb91acc335c29
+    digest: sha256:6060e6d14cdd2b5170c41c1824c74fd1c0aa264e518b3fa8e8a40d94f065db5b
   - name: akmods-zfs-stable
     image: ghcr.io/ublue-os/akmods-zfs
     tag: coreos-stable-44
-    digest: sha256:1d0b55f5ff6010f72ad59e7a5b8fdef16e35fbcbd15321b9a6c200b68e9f65d8
+    digest: sha256:fd0685cc01e9065df1c1642a8048b1fd923109ad568280cf1cb923eede83bf53
 
   # Fedora 43
   - name: base-43
@@ -25,7 +25,7 @@ images:
   - name: base-44
     image: ghcr.io/ublue-os/base-main
     tag: 44
-    digest: sha256:af980c3c948c56bd6b28237a4fd2ba780e1278fdeb0452704e06346a79ca3a75
+    digest: sha256:8e6d1d9fd4ad85cf956e1b4d626d499d434de256a7c08fbc9940c5679c142838
 
   # Bazzite
   - name: bazzite-gnome
@@ -37,7 +37,7 @@ images:
   - name: bluefin
     image: ghcr.io/ublue-os/bluefin
     tag: stable-daily
-    digest: sha256:05475fa4c2285bd07ba31e84346bfe050e57a69862568b46188cd960b0811e87
+    digest: sha256:e5584373dbb03adba5161fd53e074abfd4c0e51f5e0e5f543f47e036c0bfae90
 
   - name: bluefin-dx
     image: ghcr.io/ublue-os/bluefin-dx
@@ -47,12 +47,12 @@ images:
   - name: bluefin-nvidia
     image: ghcr.io/ublue-os/bluefin-nvidia-open
     tag: stable-daily
-    digest: sha256:4666096d89135aaeaea48a037c2ff9a3a31d4ce1fe15895e16d159cd47fdeee4
+    digest: sha256:b02a6fa9211ef8f7d8e279885629023b23ede657b4d91c7ee0e8d84013206e07
 
   - name: bluefin-dx-nvidia
     image: ghcr.io/ublue-os/bluefin-dx-nvidia-open
     tag: stable-daily
-    digest: sha256:d5c1617be89a77bac4e34983e752f995288f273fc87333d8642637a414e3a3c9
+    digest: sha256:e7c9329e665a23c4185f43bb030dfad14651ff40b63dcef0f1f2d86bc38826b7
 
   # Brew
   - name: brew
