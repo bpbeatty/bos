@@ -15,7 +15,7 @@ ARG IMAGE="bluefin"
 ARG SET_X=""
 ARG VERSION="bos"
 
-RUN --mount=type=bind,from=ctx,src=/,target=/ctx \
+RUN --mount=type=bind,from=ctx,src=/,target=/ctx,rw \
     --mount=type=bind,from=config,src=/rpms,dst=/ctx/rpms/config \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
