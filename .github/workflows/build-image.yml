@@ -53,7 +53,7 @@ jobs:
       # yamllint disable-line rule:line-length rule:comments
       image: "ghcr.io/ublue-os/devcontainer:latest@sha256:5eac43970066ea1cb8b3af668338cc085479e860d0509a9d74cba8501133966a"
       # yamllint disable-line rule:line-length rule:comments
-      options: "--privileged --volume /:/host-sys --volume /var/lib/containers:/var/lib/containers --security-opt seccomp=unconfined --security-opt apparmor=unconfined --security-opt label=disable --user 0:0"
+      options: "--privileged --volume /:/host-sys --volume /var/lib/containers:/var/lib/containers --volume /var/tmp:/var/tmp --security-opt seccomp=unconfined --security-opt apparmor=unconfined --security-opt label=disable --user 0:0"
     steps:
       - name: Maximize build space
         shell: bash
