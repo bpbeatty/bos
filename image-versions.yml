@@ -5,15 +5,15 @@ images:
   - name: akmods-stable
     image: ghcr.io/ublue-os/akmods
     tag: coreos-stable-44
-    digest: sha256:6c249659ab3896247a630208af48c85d95b2f56f21de5ec131f34b2c93d92d60
+    digest: sha256:1ebb11a3520202c0f04cd003aa9c3638b8ecee668ab7d991811f133dcfb54161
   - name: akmods-nvidia-open-stable
     image: ghcr.io/ublue-os/akmods-nvidia-open
     tag: coreos-stable-44
-    digest: sha256:3f644c1cba6e1713f8ce60979c9a142fb0c22858bd10df65a3144c6961648795
+    digest: sha256:43f80a0a06994eeeba6c369d061cb56728a809bd685e873a689de923e49c8d30
   - name: akmods-zfs-stable
     image: ghcr.io/ublue-os/akmods-zfs
     tag: coreos-stable-44
-    digest: sha256:0f282bfb7b216456f9428c35fec8a66f656d2a2967ed653c00572d94b7ee4859
+    digest: sha256:e1b211c389a865d74996d4a22040b4b108b90b62dd0c2ea326d283db4debc247
 
   # Fedora 43
   - name: base-43
@@ -25,7 +25,7 @@ images:
   - name: base-44
     image: ghcr.io/ublue-os/base-main
     tag: 44
-    digest: sha256:79469529763a583782de7a375fdf3e749ea1dfe022259b39a151d64a0956848a
+    digest: sha256:0e8364423dd89ec2419ba8778300783ac22bd384c2f9600cb81ca9c2a54b9bb3
 
   # Bazzite
   - name: bazzite-gnome
@@ -58,7 +58,7 @@ images:
   - name: brew
     image: ghcr.io/ublue-os/brew
     tag: latest
-    digest: sha256:9e0492dbc471258657564c94dae18b58dd96ddb998a06f2b15e8209efb48042b
+    digest: sha256:9c51c948d48de69b0fadfb3d97dc1a7eaa91a4e5a2af7b2b6626fdd8fca362b1
 
   # Common
   - name: common
