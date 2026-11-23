@@ -5,15 +5,15 @@ images:
   - name: akmods-stable
     image: ghcr.io/ublue-os/akmods
     tag: coreos-stable-45
-    digest: sha256:7521de0923c07dc837124ea533f300bab2545dfaf8b1321f34cf43d3b5fe7a5c
+    digest: sha256:3c4311dee0df52b4eeafd54b0dd168f5ae91e48b99fb25c82707ea6b5aa842e4
   - name: akmods-nvidia-open-stable
     image: ghcr.io/ublue-os/akmods-nvidia-open
     tag: coreos-stable-45
-    digest: sha256:c0a762b9542fa5a832a2196157be19f27b9f731fe9bf0c05d02280d3b8db552b
+    digest: sha256:c9880d157675e19c9ab382527540d46e20d7fb6a22f9e4a61b6d337c2daec93a
   - name: akmods-zfs-stable
     image: ghcr.io/ublue-os/akmods-zfs
     tag: coreos-stable-45
-    digest: sha256:8b8c06dcf35253adf740a4447bfe3f343a957cdf19572ca9c8c30d72b44ebe45
+    digest: sha256:cd1bacc3cd2715a58d432ec5736e78b67802f23c73ee25c7df5861b5939b0f23
 
   # Fedora 43
   - name: base-43
@@ -37,22 +37,22 @@ images:
   - name: bluefin
     image: ghcr.io/ublue-os/bluefin
     tag: stable-daily
-    digest: sha256:7333fd581cc369c71194cba1a08a25d809386b7ae88ac7f592df9bbbf6b6d062
+    digest: sha256:748b69493c10633b04cf595dae58eb9adae25f9043a6415fb0c5ef7756170a0e
 
   - name: bluefin-dx
     image: ghcr.io/ublue-os/bluefin-dx
     tag: stable-daily
-    digest: sha256:69b2802e12004e09ed90a6173cd9e7808a7d8ede53b32e7a7049ac67772ada9e
+    digest: sha256:7d67de1a56e231807f0966e0cc98da282c91b1faf22a90ad380932fe98414f75
 
   - name: bluefin-nvidia
     image: ghcr.io/ublue-os/bluefin-nvidia-open
     tag: stable-daily
-    digest: sha256:f24691f4ba4d436edd01f3e65a3e847c697ed8b55f5b4f3050e3e0c2b5a6ce8a
+    digest: sha256:0623ed245a5ae64316c2863d4d745310c6077b92c7aef3cb690c6ade44bc4cc6
 
   - name: bluefin-dx-nvidia
     image: ghcr.io/ublue-os/bluefin-dx-nvidia-open
     tag: stable-daily
-    digest: sha256:5f1ef05bd8ead83eb302ce80641eaf1470cfa8b3b8a80b3824e6b072d1d4d6b5
+    digest: sha256:06c61f89ee94d32e14f9dc5f822b5f5ecddbd8cf76c2b8d3a742b5efb5de3aa5
 
   # Brew
   - name: brew
